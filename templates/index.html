@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfume Formulation Calculator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8c5a0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            max-width: 560px;
+            width: 100%;
+        }
+
+        h1 { color: #6b4423; text-align: center; margin-bottom: 8px; font-size: 28px; }
+
+        .subtitle {
+            text-align: center;
+            color: #a0826d;
+            margin-bottom: 30px;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .section-header {
+            color: #6b4423;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 24px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e8d8c0;
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #6b4423;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d4b896;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #6b4423;
+        }
+
+        .input-with-prefix {
+            position: relative;
+        }
+
+        .input-with-prefix input {
+            padding-left: 44px;
+        }
+
+        .prefix {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b6f47;
+            font-weight: bold;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .percentage-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .percentage-row input[type="range"] {
+            flex: 1;
+            accent-color: #6b4423;
+        }
+
+        .percentage-row input[type="number"] {
+            width: 90px;
+            text-align: center;
+        }
+
+        .range-info {
+            font-size: 12px;
+            color: #a0826d;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .cost-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #6b4423;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+            letter-spacing: 1px;
+            margin-top: 14px;
+        }
+
+        button:hover { background: #523319; }
+
+        .results {
+            margin-top: 30px;
+            padding: 24px;
+            background: #faf5ee;
+            border-radius: 8px;
+            border-left: 4px solid #6b4423;
+            display: none;
+        }
+
+        .results.show { display: block; }
+
+        .results h2 { color: #6b4423; margin-bottom: 16px; font-size: 20px; }
+
+        .perfume-label {
+            background: #6b4423;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 16px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-section-title {
+            color: #6b4423;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 18px 0 6px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8d8c0;
+        }
+
+        .result-row.total {
+            border-bottom: none;
+            border-top: 2px solid #6b4423;
+            font-weight: bold;
+            color: #6b4423;
+            padding-top: 12px;
+            margin-top: 4px;
+            font-size: 17px;
+        }
+
+        .result-label { color: #8b6f47; }
+        .result-value { font-weight: bold; color: #523319; }
+
+        .warning {
+            background: #fdf3d8;
+            color: #8a6d1f;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 16px;
+            border-left: 3px solid #d4a93a;
+        }
+
+        .error {
+            color: #c0392b;
+            background: #fadbd8;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .error.show { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌸 Perfume Calculator</h1>
+        <p class="subtitle">Fragrance oil + premixed hydro-alcoholic base</p>
+
+        <form id="perfumeForm">
+            <div class="section-header">Formula</div>
+
+            <div class="form-group">
+                <label for="perfume_type">Perfume Type</label>
+                <select id="perfume_type">
+                    {% for key, info in perfume_types.items() %}
+                    <option value="{{ key }}" data-min="{{ info.min }}" data-max="{{ info.max }}" data-default="{{ info.default }}">
+                        {{ info.name }} ({{ info.min }}–{{ info.max }}%)
+                    </option>
+                    {% endfor %}
+                    <option value="custom" data-min="0" data-max="100" data-default="20">Custom (set your own %)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="total_volume">Total Volume (ml)</label>
+                <input type="number" id="total_volume" step="0.1" min="0" placeholder="e.g., 50" value="50" required>
+            </div>
+
+            <div class="form-group">
+                <label for="oil_percentage">Fragrance Oil Percentage</label>
+                <div class="percentage-row">
+                    <input type="range" id="oil_slider" min="0" max="100" step="0.5" value="20">
+                    <input type="number" id="oil_percentage" step="0.1" min="0" max="100" value="20" required>
+                    <span style="color:#6b4423; font-weight:bold;">%</span>
+                </div>
+                <div class="range-info" id="rangeInfo"></div>
+            </div>
+
+            <div class="section-header">Cost (Optional)</div>
+
+            <div class="cost-grid">
+                <div class="form-group">
+                    <label for="oil_cost_per_ml">Oil ₱ / ml</label>
+                    <div class="input-with-prefix">
+                        <span class="prefix">₱</span>
+                        <input type="number" id="oil_cost_per_ml" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="base_cost_per_ml">Base ₱ / ml</label>
+                    <div class="input-with-prefix">
+                        <span class="prefix">₱</span>
+                        <input type="number" id="base_cost_per_ml" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="bottle_cost">Bottle / Packaging Cost</label>
+                <div class="input-with-prefix">
+                    <span class="prefix">₱</span>
+                    <input type="number" id="bottle_cost" step="0.01" min="0" placeholder="0.00">
+                </div>
+            </div>
+
+            <button type="submit">Calculate Formula</button>
+        </form>
+
+        <div class="error" id="error"></div>
+
+        <div class="results" id="results">
+            <h2>Your Formula</h2>
+            <div class="perfume-label" id="perfumeLabel"></div>
+
+            <div class="result-section-title">Volumes</div>
+            <div class="result-row">
+                <span class="result-label">Fragrance Oil (<span id="oilPct"></span>%):</span>
+                <span class="result-value" id="oilVolume"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Hydro-Alcoholic Base (<span id="basePct"></span>%):</span>
+                <span class="result-value" id="baseVolume"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Total Volume:</span>
+                <span class="result-value" id="totalVolume"></span>
+            </div>
+
+            <div id="costSection" style="display:none;">
+                <div class="result-section-title">Cost Breakdown</div>
+                <div class="result-row">
+                    <span class="result-label">Oil cost:</span>
+                    <span class="result-value" id="oilCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Base cost:</span>
+                    <span class="result-value" id="baseCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Liquid subtotal:</span>
+                    <span class="result-value" id="liquidCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Bottle / packaging:</span>
+                    <span class="result-value" id="bottleCost"></span>
+                </div>
+                <div class="result-row total">
+                    <span class="result-label">Total Cost:</span>
+                    <span class="result-value" id="totalCost"></span>
+                </div>
+                <div class="result-row" style="font-size:13px; padding-top:8px;">
+                    <span class="result-label">Cost per ml:</span>
+                    <span class="result-value" id="costPerMl"></span>
+                </div>
+            </div>
+
+            <div class="warning" id="warning" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const typeSelect = document.getElementById('perfume_type');
+        const slider = document.getElementById('oil_slider');
+        const oilInput = document.getElementById('oil_percentage');
+        const rangeInfo = document.getElementById('rangeInfo');
+
+        slider.addEventListener('input', () => { oilInput.value = slider.value; });
+        oilInput.addEventListener('input', () => { slider.value = oilInput.value; });
+
+        function updateForType() {
+            const opt = typeSelect.selectedOptions[0];
+            const def = opt.dataset.default;
+            const min = opt.dataset.min;
+            const max = opt.dataset.max;
+            oilInput.value = def;
+            slider.value = def;
+            if (typeSelect.value === 'custom') {
+                rangeInfo.textContent = 'Set any percentage between 0 and 100%';
+            } else {
+                rangeInfo.textContent = `Recommended range: ${min}–${max}% (default set to ${def}%)`;
+            }
+        }
+        typeSelect.addEventListener('change', updateForType);
+        updateForType();
+
+        // Format as Philippine peso
+        const peso = (n) => '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        document.getElementById('perfumeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const errorEl = document.getElementById('error');
+            const resultsEl = document.getElementById('results');
+            const warningEl = document.getElementById('warning');
+            const costSection = document.getElementById('costSection');
+
+            errorEl.classList.remove('show');
+            resultsEl.classList.remove('show');
+            warningEl.style.display = 'none';
+            costSection.style.display = 'none';
+
+            const payload = {
+                total_volume: document.getElementById('total_volume').value,
+                oil_percentage: oilInput.value,
+                perfume_type: typeSelect.value,
+                oil_cost_per_ml: document.getElementById('oil_cost_per_ml').value || 0,
+                base_cost_per_ml: document.getElementById('base_cost_per_ml').value || 0,
+                bottle_cost: document.getElementById('bottle_cost').value || 0,
+            };
+
+            try {
+                const res = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorEl.textContent = data.error || 'Something went wrong';
+                    errorEl.classList.add('show');
+                    return;
+                }
+
+                document.getElementById('perfumeLabel').textContent = data.perfume_label;
+                document.getElementById('oilPct').textContent = data.oil_percentage;
+                document.getElementById('basePct').textContent = data.base_percentage;
+                document.getElementById('oilVolume').textContent = data.oil_volume + ' ml';
+                document.getElementById('baseVolume').textContent = data.base_volume + ' ml';
+                document.getElementById('totalVolume').textContent = data.total_volume + ' ml';
+
+                if (data.has_costs) {
+                    document.getElementById('oilCost').textContent = peso(data.oil_cost);
+                    document.getElementById('baseCost').textContent = peso(data.base_cost);
+                    document.getElementById('liquidCost').textContent = peso(data.liquid_cost);
+                    document.getElementById('bottleCost').textContent = peso(data.bottle_cost);
+                    document.getElementById('totalCost').textContent = peso(data.total_cost);
+                    document.getElementById('costPerMl').textContent = peso(data.cost_per_ml_output) + ' / ml';
+                    costSection.style.display = 'block';
+                }
+
+                if (data.warning) {
+                    warningEl.textContent = data.warning;
+                    warningEl.style.display = 'block';
+                }
+
+                resultsEl.classList.add('show');
+            } catch (err) {
+                errorEl.textContent = 'Network error. Please try again.';
+                errorEl.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>
