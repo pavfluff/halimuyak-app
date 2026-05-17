@@ -115,10 +115,14 @@
             font-style: italic;
         }
 
-        .cost-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
+        .fixed-cost-note {
+            background: #faf5ee;
+            color: #6b4423;
+            border: 1px solid #e8d8c0;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 18px;
         }
 
         button {
@@ -216,8 +220,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌸 Perfume Calculator</h1>
-        <p class="subtitle">Fragrance oil + premixed hydro-alcoholic base</p>
+        <h2>🌸 Halimuyak Perfume Calculator 🌸</h2>
+        <p class="subtitle">Fragrance oil + premixed hydro-alcoholic perfume base</p>
 
         <form id="perfumeForm">
             <div class="section-header">Formula</div>
@@ -249,32 +253,35 @@
                 <div class="range-info" id="rangeInfo"></div>
             </div>
 
-            <div class="section-header">Cost (Optional)</div>
+            <div class="section-header">Cost</div>
 
-            <div class="cost-grid">
-                <div class="form-group">
-                    <label for="oil_cost_per_ml">Oil ₱ / ml</label>
-                    <div class="input-with-prefix">
-                        <span class="prefix">₱</span>
-                        <input type="number" id="oil_cost_per_ml" step="0.01" min="0" placeholder="0.00">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="base_cost_per_ml">Base ₱ / ml</label>
-                    <div class="input-with-prefix">
-                        <span class="prefix">₱</span>
-                        <input type="number" id="base_cost_per_ml" step="0.01" min="0" placeholder="0.00">
-                    </div>
-                </div>
-            </div>
 
             <div class="form-group">
-                <label for="bottle_cost">Bottle / Packaging Cost</label>
-                <div class="input-with-prefix">
-                    <span class="prefix">₱</span>
-                    <input type="number" id="bottle_cost" step="0.01" min="0" placeholder="0.00">
-                </div>
+                <label for="oil_cost_per_ml">Fragrance Oil ₱ / ml</label>
+                <select id="oil_cost_per_ml">
+                    {% for option in base_cost_options %}
+                        <option value="{{ option.value }}">{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <!-- <div class="fixed-cost-note">
+                Bottle / packaging cost is fixed at <strong>₱35.00</strong> per bottle.
+            </div> -->
+
+            <div class="form-group">
+                <label for="bottle_cost">Bottle / Packaging</label>
+                <select id="bottle_cost">
+                    <option value="0">No packaging / Refill only (₱0)</option>
+                    <option value="30" selected>Transpparent Cap Glass Bottle (50 ml) - ₱30.00</option>
+                    <option value="35" selected>Transpparent Cap Glass Bottle (100 ml) - ₱35.00</option>
+                    <option value="55" selected>Gold Cap Glass Bottle (100 ml) - ₱55.00</option>
+                </select>
+            </div>
+
+            <div class="fixed-cost-note">
+                Perfume base cost is fixed at <strong>₱1.00</strong> per ml.
             </div>
 
             <button type="submit">Calculate Formula</button>
@@ -292,7 +299,7 @@
                 <span class="result-value" id="oilVolume"></span>
             </div>
             <div class="result-row">
-                <span class="result-label">Hydro-Alcoholic Base (<span id="basePct"></span>%):</span>
+                <span class="result-label">Perfume Base (<span id="basePct"></span>%):</span>
                 <span class="result-value" id="baseVolume"></span>
             </div>
             <div class="result-row">
@@ -303,19 +310,19 @@
             <div id="costSection" style="display:none;">
                 <div class="result-section-title">Cost Breakdown</div>
                 <div class="result-row">
-                    <span class="result-label">Oil cost:</span>
+                    <span class="result-label">Fragrance Oil Cost:</span>
                     <span class="result-value" id="oilCost"></span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">Base cost:</span>
+                    <span class="result-label">Perfume Base Cost:</span>
                     <span class="result-value" id="baseCost"></span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">Liquid subtotal:</span>
+                    <span class="result-label" style="font-weight: bold;">Liquid Subtotal:</span>
                     <span class="result-value" id="liquidCost"></span>
                 </div>
                 <div class="result-row">
-                    <span class="result-label">Bottle / packaging:</span>
+                    <span class="result-label" style="font-weight: bold;">Bottle / Packaging:</span>
                     <span class="result-value" id="bottleCost"></span>
                 </div>
                 <div class="result-row total">
@@ -337,6 +344,7 @@
         const slider = document.getElementById('oil_slider');
         const oilInput = document.getElementById('oil_percentage');
         const rangeInfo = document.getElementById('rangeInfo');
+        const BASE_OIL_COST = 1;
 
         slider.addEventListener('input', () => { oilInput.value = slider.value; });
         oilInput.addEventListener('input', () => { slider.value = oilInput.value; });
@@ -378,8 +386,8 @@
                 oil_percentage: oilInput.value,
                 perfume_type: typeSelect.value,
                 oil_cost_per_ml: document.getElementById('oil_cost_per_ml').value || 0,
-                base_cost_per_ml: document.getElementById('base_cost_per_ml').value || 0,
-                bottle_cost: document.getElementById('bottle_cost').value || 0,
+                base_cost_per_ml: BASE_OIL_COST,
+                bottle_cost: document.getElementById('bottle_cost').value,
             };
 
             try {

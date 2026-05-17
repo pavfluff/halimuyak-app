@@ -1,6 +1,20 @@
 from flask import Flask, render_template, request, jsonify
+import pandas as pd
+import requests
+import io
 
 app = Flask(__name__)
+
+# get the pricing from google sheet
+url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcjPxbOlxLk02eJyc_KBecdIeG0gOFULpb0dDgfA4zy2vIKyMSZlg5NxTGH1_vaKu3iBxneRSB_xuX/pub?gid=590550743&single=true&output=csv"
+def load_base_cost_options(url):
+    url = url
+    response = requests.get(url)
+    df = pd.read_csv(io.StringIO(response.text))
+    df.columns = df.columns.str.strip()  # strip whitespace from headers
+    return df[["value", "label"]].to_dict(orient="records")
+
+FRAG_COST_OPTIONS = load_base_cost_options(url)
 
 PERFUME_TYPES = {
     "edp": {"name": "Eau de Parfum (EDP)", "min": 15, "max": 25, "default": 20},
@@ -13,7 +27,11 @@ PERFUME_TYPES = {
 
 @app.route("/")
 def index():
-    return render_template("index.html", perfume_types=PERFUME_TYPES)
+    return render_template(
+        "index.html",
+        perfume_types=PERFUME_TYPES,
+        base_cost_options=FRAG_COST_OPTIONS
+    )
 
 
 @app.route("/calculate", methods=["POST"])
