@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <title>Perfume Formulation Calculator</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,6 +67,22 @@
             font-family: inherit;
             background: #fff;
             transition: border-color 0.2s;
+        }
+
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d4b896;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #6b4423;
         }
 
         input[type="number"]:focus, select:focus {
@@ -224,6 +241,13 @@
         <p class="subtitle">Fragrance oil + premixed hydro-alcoholic perfume base</p>
 
         <form id="perfumeForm">
+            <div class="section-header">Personalized Perfume</div>
+
+            <div class="form-group">
+                <label for="customer_name">Customer Name</label>
+                <input type="text" id="customer_name" placeholder="e.g., Juan dela Cruz">
+            </div>
+
             <div class="section-header">Formula</div>
 
             <div class="form-group">
@@ -291,11 +315,20 @@
 
         <div class="results" id="results">
             <h2>Your Formula</h2>
-            <div class="perfume-label" id="perfumeLabel"></div>
-
+            <div style="margin-bottom: 12px; color: #8b6f47; font-size: 14px;">
+                Prepared for: <strong id="displayName" style="color: #6b4423;"></strong>
+            </div>
+            <div style="margin-bottom: 12px; color: #8b6f47; font-size: 14px;">
+                Order Date: <strong id="displayDate" style="color: #6b4423;"></strong>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                <div class="perfume-label" id="perfumeLabel"></div>
+                <div class="perfume-label" id="fragName"></div>
+            </div>
             <div class="result-section-title">Volumes</div>
             <div class="result-row">
                 <span class="result-label">Fragrance Oil (<span id="oilPct"></span>%):</span>
+                <span class="result-value" id="fragName"></span>
                 <span class="result-value" id="oilVolume"></span>
             </div>
             <div class="result-row">
@@ -336,6 +369,10 @@
             </div>
 
             <div class="warning" id="warning" style="display:none;"></div>
+
+            <button type="button" id="downloadBtn" onclick="downloadReceipt()" style="margin-top: 16px; background: #a0826d;">
+                📥 Download Receipt
+            </button>
         </div>
     </div>
 
@@ -405,6 +442,9 @@
                 }
 
                 document.getElementById('perfumeLabel').textContent = data.perfume_label;
+                document.getElementById('displayDate').textContent = new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('displayName').textContent = document.getElementById('customer_name').value || '—';
+                document.getElementById('fragName').textContent = document.getElementById('oil_cost_per_ml').selectedOptions[0].text;
                 document.getElementById('oilPct').textContent = data.oil_percentage;
                 document.getElementById('basePct').textContent = data.base_percentage;
                 document.getElementById('oilVolume').textContent = data.oil_volume + ' ml';
@@ -432,6 +472,19 @@
                 errorEl.classList.add('show');
             }
         });
+
+        function downloadReceipt() {
+            const receipt = document.getElementById('results');
+            const btn = document.getElementById('downloadBtn');
+            btn.style.display = 'none';
+            html2canvas(receipt, { backgroundColor: '#faf5ee', scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'halimuyak-receipt.png';
+                link.href = canvas.toDataURL();
+                link.click();
+                btn.style.display = 'block';
+            });
+        }
     </script>
 </body>
 </html>
