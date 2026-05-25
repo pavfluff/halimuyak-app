@@ -7,12 +7,21 @@ app = Flask(__name__)
 
 # get the pricing from google sheet
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcjPxbOlxLk02eJyc_KBecdIeG0gOFULpb0dDgfA4zy2vIKyMSZlg5NxTGH1_vaKu3iBxneRSB_xuX/pub?gid=590550743&single=true&output=csv"
+
 def load_base_cost_options(url):
-    url = url
     response = requests.get(url)
     df = pd.read_csv(io.StringIO(response.text))
-    df.columns = df.columns.str.strip()  # strip whitespace from headers
-    return df[["value", "label"]].to_dict(orient="records")
+    df.columns = df.columns.str.strip()
+
+    # Return image_url column too if it exists, otherwise leave it blank
+    cols = ["value", "label"]
+    if "image_url" in df.columns:
+        cols.append("image_url")
+        df["image_url"] = df["image_url"].fillna("")
+    else:
+        df["image_url"] = ""
+    cols = ["value", "label", "image_url"]
+    return df[cols].to_dict(orient="records")
 
 FRAG_COST_OPTIONS = load_base_cost_options(url)
 
@@ -45,7 +54,6 @@ def calculate():
         base_cost_per_ml = float(data.get("base_cost_per_ml", 0) or 0)
         bottle_cost = float(data.get("bottle_cost", 0) or 0)
 
-        # Validation
         if total_volume <= 0:
             return jsonify({"error": "Total volume must be greater than 0"}), 400
         if oil_percentage <= 0 or oil_percentage > 100:
@@ -53,19 +61,16 @@ def calculate():
         if oil_cost_per_ml < 0 or base_cost_per_ml < 0 or bottle_cost < 0:
             return jsonify({"error": "Costs cannot be negative"}), 400
 
-        # Volume calculations
         oil_volume = total_volume * (oil_percentage / 100)
         base_volume = total_volume - oil_volume
         base_percentage = 100 - oil_percentage
 
-        # Cost calculations
         oil_cost = oil_volume * oil_cost_per_ml
         base_cost = base_volume * base_cost_per_ml
         liquid_cost = oil_cost + base_cost
         total_cost = liquid_cost + bottle_cost
         cost_per_ml_output = total_cost / total_volume if total_volume > 0 else 0
 
-        # Perfume type label and warning
         warning = None
         if perfume_type_key in PERFUME_TYPES:
             type_info = PERFUME_TYPES[perfume_type_key]
@@ -98,6 +103,6 @@ def calculate():
     except (ValueError, TypeError):
         return jsonify({"error": "Please enter valid numbers"}), 400
 
-### for debugging purposes
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

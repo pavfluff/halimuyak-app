@@ -21,22 +21,134 @@
         .container {
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             padding: 40px;
             max-width: 560px;
             width: 100%;
         }
 
-        h1 { color: #6b4423; text-align: center; margin-bottom: 8px; font-size: 28px; }
+        .logo-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-header img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
+        .logo-placeholder {
+            font-size: 80px;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        h2 { color: #6b4423; text-align: center; margin-bottom: 6px; font-size: 26px; }
 
         .subtitle {
             text-align: center;
             color: #a0826d;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             font-size: 14px;
             font-style: italic;
         }
 
+        .about-body p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .owners {
+            font-size: 10px;
+            opacity: 0.5;
+        }
+
+        /* ── About strip ─────────────────────────────────────────────── */
+        .about-strip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #faf5ee;
+            border: 1px solid #e8d8c0;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 14px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+            margin-bottom: 0;
+        }
+
+        .about-strip.collapsed {
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .about-strip:hover { background: #f5ede0; }
+
+        .about-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e8d8c0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .about-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .about-strip-text { flex: 1; }
+
+        .about-strip-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #6b4423;
+            margin-bottom: 2px;
+        }
+
+        .about-strip-hint {
+            font-size: 12px;
+            color: #a0826d;
+            font-style: italic;
+        }
+
+        .about-chevron {
+            color: #a0826d;
+            font-size: 18px;
+            transition: transform 0.25s;
+            line-height: 1;
+        }
+
+        .about-chevron.open { transform: rotate(180deg); }
+
+        .about-body {
+            background: #faf5ee;
+            border: 1px solid #e8d8c0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 14px 16px 16px;
+            font-size: 13px;
+            color: #6b4423;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .about-body.open { display: block; }
+
+        /* ── Section header ──────────────────────────────────────────── */
         .section-header {
             color: #6b4423;
             font-size: 13px;
@@ -58,7 +170,7 @@
             font-size: 14px;
         }
 
-        input[type="number"], select {
+        input[type="text"], select {
             width: 100%;
             padding: 12px;
             border: 2px solid #d4b896;
@@ -69,51 +181,78 @@
             transition: border-color 0.2s;
         }
 
-        input[type="number"], input[type="text"], select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #d4b896;
-            border-radius: 6px;
-            font-size: 16px;
-            font-family: inherit;
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #6b4423;
+        }
+
+        .card-picker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .picker-card {
+            border: 2px solid #e8d8c0;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: border-color 0.18s, box-shadow 0.18s;
             background: #fff;
-            transition: border-color 0.2s;
+            text-align: center;
+            user-select: none;
         }
 
-        input[type="number"]:focus, input[type="text"]:focus, select:focus {
-            outline: none;
+        .picker-card:hover {
+            border-color: #a0826d;
+            box-shadow: 0 2px 8px rgba(107,68,35,0.10);
+        }
+
+        .picker-card.selected {
             border-color: #6b4423;
+            background: #faf5ee;
+            box-shadow: 0 2px 10px rgba(107,68,35,0.15);
         }
 
-        input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: #6b4423;
+        .picker-card img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .input-with-prefix {
-            position: relative;
+        .picker-card .img-placeholder {
+            width: 64px;
+            height: 64px;
+            background: #f5e6d3;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
+            font-size: 26px;
         }
 
-        .input-with-prefix input {
-            padding-left: 44px;
-        }
-
-        .prefix {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #8b6f47;
-            font-weight: bold;
-            font-size: 14px;
-            pointer-events: none;
-        }
-
-        .range-info {
+        .picker-card .card-name {
             font-size: 12px;
+            font-weight: bold;
+            color: #6b4423;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+
+        .picker-card .card-price {
+            font-size: 13px;
             color: #a0826d;
-            margin-top: 6px;
-            font-style: italic;
+        }
+
+        .picker-card.selected .card-price {
+            color: #6b4423;
+            font-weight: bold;
         }
 
         .fixed-cost-note {
@@ -126,7 +265,7 @@
             margin-bottom: 18px;
         }
 
-        button {
+        button[type="submit"] {
             width: 100%;
             padding: 14px;
             background: #6b4423;
@@ -142,7 +281,7 @@
             margin-top: 14px;
         }
 
-        button:hover { background: #523319; }
+        button[type="submit"]:hover { background: #523319; }
 
         .results {
             margin-top: 30px;
@@ -154,7 +293,6 @@
         }
 
         .results.show { display: block; }
-
         .results h2 { color: #6b4423; margin-bottom: 16px; font-size: 20px; }
 
         .perfume-label {
@@ -217,259 +355,418 @@
         }
 
         .error.show { display: block; }
+
+        #downloadBtn {
+            width: 100%;
+            padding: 12px;
+            background: #a0826d;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            margin-top: 16px;
+        }
+
+        #downloadBtn:hover { background: #8b6f47; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>🌸 Halimuyak Perfume Calculator 🌸</h2>
-        <p class="subtitle">Fragrance oil + premixed hydro-alcoholic perfume base</p>
+<div class="container">
+    <!-- ── Logo header ── -->
+    <div class="logo-header">
+    <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
 
-        <form id="perfumeForm">
-            <div class="section-header">Personalized Perfume</div>
-
-            <div class="form-group">
-                <label for="customer_name">Customer Name</label>
-                <input type="text" id="customer_name" placeholder="e.g., Juan dela Cruz">
-            </div>
-
-            <div class="section-header">Formula</div>
-
-            <!-- CHANGED: Single dropdown combining perfume type + fixed percentage -->
-            <div class="form-group">
-                <label for="perfume_type">Perfume Type &amp; Concentration</label>
-                <select id="perfume_type">
-                    <option value="edp_20" data-type="edp" data-pct="20">Eau de Parfum — 20%</option>
-                    <option value="edp_25" data-type="edp" data-pct="25">Eau de Parfum — 25%</option>
-                    <option value="edp_30" data-type="edp" data-pct="30">Eau de Parfum — 30%</option>
-                    <option value="edt_12" data-type="edt" data-pct="12">Eau de Toilette — 12%</option>
-                    <option value="edc_8"  data-type="edc" data-pct="8">Eau de Cologne — 8%</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="total_volume">Total Volume (ml)</label>
-                <select id="total_volume">
-                    <option value="50">50 ml</option>
-                    <option value="100">100 ml</option>
-                </select>
-            </div>
-
-            <div class="section-header">Cost</div>
-
-            <div class="form-group">
-                <label for="oil_cost_per_ml">Fragrance Oil ₱ / ml</label>
-                <select id="oil_cost_per_ml">
-                    {% for option in base_cost_options %}
-                        <option value="{{ option.value }}">{{ option.label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- CHANGED: bottle options filtered by volume via JS -->
-            <div class="form-group">
-                <label for="bottle_cost">Bottle / Packaging</label>
-                <select id="bottle_cost">
-                    <!-- populated dynamically -->
-                </select>
-            </div>
-
-            <div class="fixed-cost-note">
-                Perfume base cost is fixed at <strong>₱1.00</strong> per ml.
-            </div>
-
-            <button type="submit">Calculate Formula</button>
-        </form>
-
-        <div class="error" id="error"></div>
-
-        <div class="results" id="results">
-            <h2>Your Formula</h2>
-            <div style="margin-bottom: 12px; color: #8b6f47; font-size: 14px;">
-                Prepared for: <strong id="displayName" style="color: #6b4423;"></strong>
-            </div>
-            <div style="margin-bottom: 12px; color: #8b6f47; font-size: 14px;">
-                Order Date: <strong id="displayDate" style="color: #6b4423;"></strong>
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-                <div class="perfume-label" id="perfumeLabel"></div>
-                <div class="perfume-label" id="fragName"></div>
-            </div>
-            <div class="result-section-title">Volumes</div>
-            <div class="result-row">
-                <span class="result-label">Fragrance Oil (<span id="oilPct"></span>%):</span>
-                <span class="result-value" id="oilVolume"></span>
-            </div>
-            <div class="result-row">
-                <span class="result-label">Perfume Base (<span id="basePct"></span>%):</span>
-                <span class="result-value" id="baseVolume"></span>
-            </div>
-            <div class="result-row">
-                <span class="result-label">Total Volume:</span>
-                <span class="result-value" id="totalVolume"></span>
-            </div>
-
-            <div id="costSection" style="display:none;">
-                <div class="result-section-title">Cost Breakdown</div>
-                <div class="result-row">
-                    <span class="result-label">Fragrance Oil Cost:</span>
-                    <span class="result-value" id="oilCost"></span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label">Perfume Base Cost:</span>
-                    <span class="result-value" id="baseCost"></span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label" style="font-weight: bold;">Liquid Subtotal:</span>
-                    <span class="result-value" id="liquidCost"></span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label" style="font-weight: bold;">Bottle / Packaging:</span>
-                    <span class="result-value" id="bottleCost"></span>
-                </div>
-                <div class="result-row total">
-                    <span class="result-label">Total Cost:</span>
-                    <span class="result-value" id="totalCost"></span>
-                </div>
-                <div class="result-row" style="font-size:13px; padding-top:8px;">
-                    <span class="result-label">Cost per ml:</span>
-                    <span class="result-value" id="costPerMl"></span>
-                </div>
-            </div>
-
-            <div class="warning" id="warning" style="display:none;"></div>
-
-            <button type="button" id="downloadBtn" onclick="downloadReceipt()" style="margin-top: 16px; background: #a0826d;">
-                📥 Download Receipt
-            </button>
-        </div>
+        <p class="subtitle">
+            Small DIY Perfumery
+            <br>
+            <span class="owners">by Alena, Tristan, & Aging</span>
+        </p>
     </div>
 
-    <script>
-        const BASE_OIL_COST = 1;
+    <!-- ── About strip ── -->
+    <div class="about-strip collapsed" id="aboutStrip" onclick="toggleAbout()">
+        <div class="about-logo">
+                 <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
+        </div>
+        <div class="about-strip-text">
+            <div class="about-strip-name">About Halimuyak</div>
+            <div class="about-strip-hint" id="aboutHint">tap to read our vision</div>
+        </div>
+        <div class="about-chevron" id="aboutChevron">▾</div>
+    </div>
+    <div class="about-body" id="aboutBody">
+        <p>
+        Halimuyak aims to make luxury-inspired scents 
+        affordable and personal for everyone by giving customers 
+        the freedom to choose their own fragrance concentration. 
+        We believe that everyone deserves a 
+        signature scent that matches their personality, style, and budget.
+        </p>
+        <p>
+        As a small growing business, we sincerely thank you for 
+        your patience, support, and understanding as we continue 
+        to learn and improve along the way.
+        </p>
+    </div>
 
-        // ── Bottle options keyed by volume ──────────────────────────────────
-        const BOTTLE_OPTIONS = {
-            50: [
-                { value: "0",  label: "No packaging / Refill only (₱0)" },
-                { value: "30", label: "Transparent Cap Glass Bottle (50 ml) — ₱30.00" },
-            ],
-            100: [
-                { value: "0",  label: "No packaging / Refill only (₱0)" },
-                { value: "35", label: "Transparent Cap Glass Bottle (100 ml) — ₱35.00" },
-                { value: "55", label: "Gold Cap Glass Bottle (100 ml) — ₱55.00" },
-            ],
-        };
+    <form id="perfumeForm">
 
-        // ── Perfume type labels for the backend ─────────────────────────────
-        // Maps data-type → backend key expected by PERFUME_TYPES in app.py
-        const TYPE_KEY_MAP = { edp: "edp", edt: "edt", edc: "edc" };
+        <div class="section-header">Personalized Perfume</div>
 
-        // ── Populate bottle dropdown based on selected volume ───────────────
-        const volumeSelect   = document.getElementById('total_volume');
-        const bottleSelect   = document.getElementById('bottle_cost');
-        const typeSelect     = document.getElementById('perfume_type');
+        <div class="form-group">
+            <label for="customer_name">Customer Name</label>
+            <input type="text" id="customer_name" placeholder="e.g., Juan dela Cruz">
+        </div>
 
-        function updateBottleOptions() {
-            const vol = parseInt(volumeSelect.value, 10);
-            const opts = BOTTLE_OPTIONS[vol] || BOTTLE_OPTIONS[50];
-            bottleSelect.innerHTML = opts
-                .map(o => `<option value="${o.value}">${o.label}</option>`)
-                .join('');
+        <div class="section-header">Formula</div>
+
+        <div class="form-group">
+            <label for="perfume_type">Perfume Type &amp; Concentration</label>
+            <select id="perfume_type">
+                <option value="edp_20" data-type="edp" data-pct="20">Eau de Parfum — 20%</option>
+                <option value="edp_25" data-type="edp" data-pct="25">Eau de Parfum — 25%</option>
+                <option value="edp_30" data-type="edp" data-pct="30">Eau de Parfum — 30%</option>
+                <option value="edt_12" data-type="edt" data-pct="12">Eau de Toilette — 12%</option>
+                <option value="edc_8"  data-type="edc" data-pct="8">Eau de Cologne — 8%</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="total_volume">Total Volume (ml)</label>
+            <select id="total_volume">
+                <option value="50">50 ml</option>
+                <option value="100">100 ml</option>
+            </select>
+        </div>
+
+        <div class="section-header">Fragrance Oil</div>
+
+        <div class="form-group">
+            <label>Select Fragrance Oil</label>
+            <div class="card-picker" id="oilPicker">
+                {% for option in base_cost_options %}
+                <div class="picker-card"
+                     data-value="{{ option.value }}"
+                     data-label="{{ option.label }}">
+                    <div class="img-placeholder" id="oil-img-{{ loop.index0 }}">🌸</div>
+                    <div class="card-name">{{ option.label }}</div>
+                    <div class="card-price">₱{{ option.value }}/ml</div>
+                </div>
+                {% endfor %}
+            </div>
+            <input type="hidden" id="oil_cost_per_ml" value="">
+        </div>
+
+        <div class="section-header">Bottle / Packaging</div>
+
+        <div class="form-group">
+            <label>Select Bottle</label>
+            <div class="card-picker" id="bottlePicker"></div>
+            <input type="hidden" id="bottle_cost" value="0">
+        </div>
+
+        <div class="fixed-cost-note">
+            Perfume base cost is fixed at <strong>₱1.00</strong> per ml.
+        </div>
+
+        <button type="submit">Calculate Formula</button>
+    </form>
+
+    <div class="error" id="error"></div>
+
+    <div class="results" id="results">
+        <h2>Your Formula</h2>
+        <div style="margin-bottom:12px; color:#8b6f47; font-size:14px;">
+            Prepared for: <strong id="displayName" style="color:#6b4423;"></strong>
+        </div>
+        <div style="margin-bottom:12px; color:#8b6f47; font-size:14px;">
+            Order Date: <strong id="displayDate" style="color:#6b4423;"></strong>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+            <div class="perfume-label" id="perfumeLabel"></div>
+            <div class="perfume-label" id="fragName"></div>
+        </div>
+
+        <div class="result-section-title">Volumes</div>
+        <div class="result-row">
+            <span class="result-label">Fragrance Oil (<span id="oilPct"></span>%):</span>
+            <span class="result-value" id="oilVolume"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Perfume Base (<span id="basePct"></span>%):</span>
+            <span class="result-value" id="baseVolume"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Total Volume:</span>
+            <span class="result-value" id="totalVolume"></span>
+        </div>
+
+        <div id="costSection" style="display:none;">
+            <div class="result-section-title">Cost Breakdown</div>
+            <div class="result-row">
+                <span class="result-label">Fragrance Oil Cost:</span>
+                <span class="result-value" id="oilCost"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Perfume Base Cost:</span>
+                <span class="result-value" id="baseCost"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label" style="font-weight:bold;">Liquid Subtotal:</span>
+                <span class="result-value" id="liquidCost"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label" style="font-weight:bold;">Bottle / Packaging:</span>
+                <span class="result-value" id="bottleCost"></span>
+            </div>
+            <div class="result-row total">
+                <span class="result-label">Total Cost:</span>
+                <span class="result-value" id="totalCost"></span>
+            </div>
+            <div class="result-row" style="font-size:13px; padding-top:8px;">
+                <span class="result-label">Cost per ml:</span>
+                <span class="result-value" id="costPerMl"></span>
+            </div>
+        </div>
+
+        <div class="warning" id="warning" style="display:none;"></div>
+
+        <button type="button" id="downloadBtn" onclick="downloadReceipt()">
+            📥 Download Receipt
+        </button>
+    </div>
+</div>
+
+<script>
+    const BASE_OIL_COST = 1;
+    const TYPE_KEY_MAP  = { edp: "edp", edt: "edt", edc: "edc" };
+
+    // ─────────────────────────────────────────────────────────────────────
+    // OIL IMAGES
+    // Key = the "label" value from your Google Sheet (must match exactly).
+    // Value = path inside your static/images/oils/ folder.
+    // Add one entry per fragrance oil you carry.
+    // ─────────────────────────────────────────────────────────────────────
+    const OIL_IMAGES = {
+        "Chanel Bleu (M)":                        "/static/images/oils/bleu_de_chanel.png",
+        "Burberry Weekend (M)":                   "/static/images/oils/burberry_weekend.png",
+        "Davidoff Cool Blue (M)":                 "/static/images/oils/davidoff_cool_blue.png",
+        "Lacoste Black (M)":                      "/static/images/oils/lacoste_black.png",
+        "Versace Erox (M)":                       "/static/images/oils/versace_erox.png",
+        "Bvlgari Aquamarine (M)":                 "/static/images/oils/bvlgari_aquamarine.png",
+        "Prada Paradoxe (W)":                     "/static/images/oils/prada_paradoxe.png",
+        "Victoria Secret Pure Seduction (W)":     "/static/images/oils/vs_pure_seduc.png",
+        "CK BE (M)":                              "/static/images/oils/ck_be.png",
+        "YSL Y (M)":                              "/static/images/oils/ysl_y.png",
+        "Ralph Lauren Polo Blue (M)":             "/static/images/oils/polo_blue.png",
+        "Elizabeth Arden Green Tea (W)":          "/static/images/oils/green_tea.png",
+        "Bvlgari Omnia Amethyst (W)":             "/static/images/oils/omnia_amethyste.png",
+        "Burberry Her (W)":                       "/static/images/oils/burberry_her.png",
+        "JM English Pear (W)":                    "/static/images/oils/jm_eng_pear.png",
+        "VS Velvet Floral (W)":                   "/static/images/oils/vs_velvel_flo.png",
+        "Hugo Boss (M)":                          "/static/images/oils/hugo_boss.png",
+        "DG Light Blue (W)":                      "/static/images/oils/dg_light_blue.png",
+        "Invictus Paco Rabanne (M)":              "/static/images/oils/invictus_pr.png",
+        "Eclaire Eclat d' Arpege (W)":            "/static/images/oils/eclaire_eclat_arpeg.png",
+    };
+
+    // ─────────────────────────────────────────────────────────────────────
+    // BOTTLE OPTIONS
+    // Add your local image paths in the `image` field.
+    // Leave image as "" to keep the emoji placeholder.
+    // ─────────────────────────────────────────────────────────────────────
+    const BOTTLE_OPTIONS = {
+        50: [
+            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                        emoji: "🚫" },
+            { value: "30", label: "50 ml Clear Glass",          price: "₱30.00", image: "/static/images/bottles/clear-50ml.png",   emoji: "🫙" },
+        ],
+        100: [
+            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                        emoji: "🚫" },
+            { value: "35", label: "100 ml Clear Glass",         price: "₱35.00", image: "/static/images/bottles/clear-100ml.png",  emoji: "🫙" },
+            { value: "55", label: "100 ml Gold Cap",            price: "₱55.00", image: "/static/images/bottles/gold-100ml.png",   emoji: "✨" },
+        ],
+    };
+
+    // ── Wire up oil cards: swap placeholder for real image if OIL_IMAGES has a match ──
+    const oilPicker  = document.getElementById("oilPicker");
+    const oilHidden  = document.getElementById("oil_cost_per_ml");
+    const oilCards   = oilPicker.querySelectorAll(".picker-card");
+
+    oilCards.forEach((card, i) => {
+        const label = card.dataset.label;
+        const placeholder = card.querySelector(".img-placeholder");
+
+        if (OIL_IMAGES[label]) {
+            const img = document.createElement("img");
+            img.src = OIL_IMAGES[label];
+            img.alt = label;
+            placeholder.replaceWith(img);
         }
 
-        volumeSelect.addEventListener('change', updateBottleOptions);
-        updateBottleOptions(); // run on load
+        card.addEventListener("click", () => {
+            oilCards.forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            oilHidden.value = card.dataset.value;
+        });
+    });
 
-        // ── Helpers ─────────────────────────────────────────────────────────
-        const peso = (n) =>
-            '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // Select first oil card by default
+    if (oilCards.length > 0) {
+        oilCards[0].classList.add("selected");
+        oilHidden.value = oilCards[0].dataset.value;
+    }
 
-        // ── Form submit ──────────────────────────────────────────────────────
-        document.getElementById('perfumeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    // ── Bottle picker ────────────────────────────────────────────────────
+    const volumeSelect = document.getElementById("total_volume");
+    const bottlePicker = document.getElementById("bottlePicker");
+    const bottleHidden = document.getElementById("bottle_cost");
 
-            const errorEl    = document.getElementById('error');
-            const resultsEl  = document.getElementById('results');
-            const warningEl  = document.getElementById('warning');
-            const costSection = document.getElementById('costSection');
+    function buildPicker(containerEl, hiddenInput, items, autoSelect = 0) {
+        containerEl.innerHTML = "";
+        items.forEach((item, i) => {
+            const card = document.createElement("div");
+            card.className = "picker-card" + (i === autoSelect ? " selected" : "");
+            card.dataset.value = item.value;
 
-            errorEl.classList.remove('show');
-            resultsEl.classList.remove('show');
-            warningEl.style.display  = 'none';
-            costSection.style.display = 'none';
+            const imgHtml = item.image
+                ? `<img src="${item.image}" alt="${item.label}">`
+                : `<div class="img-placeholder">${item.emoji || "🌸"}</div>`;
 
-            // Read selected perfume type option
-            const selectedOpt  = typeSelect.selectedOptions[0];
-            const oilPct       = parseFloat(selectedOpt.dataset.pct);
-            const backendType  = TYPE_KEY_MAP[selectedOpt.dataset.type] || 'custom';
+            card.innerHTML = `
+                ${imgHtml}
+                <div class="card-name">${item.label}</div>
+                <div class="card-price">${item.price}</div>
+            `;
 
-            const payload = {
-                total_volume:    volumeSelect.value,
-                oil_percentage:  oilPct,
-                perfume_type:    backendType,
-                oil_cost_per_ml: document.getElementById('oil_cost_per_ml').value || 0,
-                base_cost_per_ml: BASE_OIL_COST,
-                bottle_cost:     bottleSelect.value,
-            };
+            card.addEventListener("click", () => {
+                containerEl.querySelectorAll(".picker-card").forEach(c => c.classList.remove("selected"));
+                card.classList.add("selected");
+                hiddenInput.value = item.value;
+            });
 
-            try {
-                const res  = await fetch('/calculate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                });
-                const data = await res.json();
-
-                if (!res.ok) {
-                    errorEl.textContent = data.error || 'Something went wrong';
-                    errorEl.classList.add('show');
-                    return;
-                }
-
-                document.getElementById('perfumeLabel').textContent = data.perfume_label + ` (${oilPct}%)`;
-                document.getElementById('displayDate').textContent  = new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
-                document.getElementById('displayName').textContent  = document.getElementById('customer_name').value || '—';
-                document.getElementById('fragName').textContent     = document.getElementById('oil_cost_per_ml').selectedOptions[0].text;
-                document.getElementById('oilPct').textContent       = data.oil_percentage;
-                document.getElementById('basePct').textContent      = data.base_percentage;
-                document.getElementById('oilVolume').textContent    = data.oil_volume + ' ml';
-                document.getElementById('baseVolume').textContent   = data.base_volume + ' ml';
-                document.getElementById('totalVolume').textContent  = data.total_volume + ' ml';
-
-                if (data.has_costs) {
-                    document.getElementById('oilCost').textContent    = peso(data.oil_cost);
-                    document.getElementById('baseCost').textContent   = peso(data.base_cost);
-                    document.getElementById('liquidCost').textContent = peso(data.liquid_cost);
-                    document.getElementById('bottleCost').textContent = peso(data.bottle_cost);
-                    document.getElementById('totalCost').textContent  = peso(data.total_cost);
-                    document.getElementById('costPerMl').textContent  = peso(data.cost_per_ml_output) + ' / ml';
-                    costSection.style.display = 'block';
-                }
-
-                if (data.warning) {
-                    warningEl.textContent    = data.warning;
-                    warningEl.style.display  = 'block';
-                }
-
-                resultsEl.classList.add('show');
-            } catch (err) {
-                errorEl.textContent = 'Network error. Please try again.';
-                errorEl.classList.add('show');
-            }
+            containerEl.appendChild(card);
         });
 
-        function downloadReceipt() {
-            const receipt = document.getElementById('results');
-            const btn     = document.getElementById('downloadBtn');
-            btn.style.display = 'none';
-            html2canvas(receipt, { backgroundColor: '#faf5ee', scale: 2 }).then(canvas => {
-                const link      = document.createElement('a');
-                link.download   = 'halimuyak-receipt.png';
-                link.href       = canvas.toDataURL();
-                link.click();
-                btn.style.display = 'block';
+        if (items[autoSelect]) hiddenInput.value = items[autoSelect].value;
+    }
+
+    function refreshBottlePicker() {
+        const vol   = parseInt(volumeSelect.value, 10);
+        const items = BOTTLE_OPTIONS[vol] || BOTTLE_OPTIONS[50];
+        buildPicker(bottlePicker, bottleHidden, items, 0);
+    }
+
+    volumeSelect.addEventListener("change", refreshBottlePicker);
+    refreshBottlePicker();
+
+    // ── Helpers ──────────────────────────────────────────────────────────
+    const peso = n =>
+        "₱" + Number(n).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    // ── Form submit ──────────────────────────────────────────────────────
+    document.getElementById("perfumeForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const errorEl     = document.getElementById("error");
+        const resultsEl   = document.getElementById("results");
+        const warningEl   = document.getElementById("warning");
+        const costSection = document.getElementById("costSection");
+
+        errorEl.classList.remove("show");
+        resultsEl.classList.remove("show");
+        warningEl.style.display   = "none";
+        costSection.style.display = "none";
+
+        const selectedOpt  = document.getElementById("perfume_type").selectedOptions[0];
+        const oilPct       = parseFloat(selectedOpt.dataset.pct);
+        const backendType  = TYPE_KEY_MAP[selectedOpt.dataset.type] || "custom";
+
+        const selectedOilCard  = oilPicker.querySelector(".picker-card.selected");
+        const selectedOilLabel = selectedOilCard ? selectedOilCard.querySelector(".card-name").textContent : "—";
+
+        const payload = {
+            total_volume:     volumeSelect.value,
+            oil_percentage:   oilPct,
+            perfume_type:     backendType,
+            oil_cost_per_ml:  oilHidden.value || 0,
+            base_cost_per_ml: BASE_OIL_COST,
+            bottle_cost:      bottleHidden.value,
+        };
+
+        try {
+            const res  = await fetch("/calculate", {
+                method:  "POST",
+                headers: { "Content-Type": "application/json" },
+                body:    JSON.stringify(payload),
             });
+            const data = await res.json();
+
+            if (!res.ok) {
+                errorEl.textContent = data.error || "Something went wrong";
+                errorEl.classList.add("show");
+                return;
+            }
+
+            document.getElementById("perfumeLabel").textContent = data.perfume_label + ` (${oilPct}%)`;
+            document.getElementById("displayDate").textContent  = new Date().toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" });
+            document.getElementById("displayName").textContent  = document.getElementById("customer_name").value || "—";
+            document.getElementById("fragName").textContent     = selectedOilLabel;
+            document.getElementById("oilPct").textContent       = data.oil_percentage;
+            document.getElementById("basePct").textContent      = data.base_percentage;
+            document.getElementById("oilVolume").textContent    = data.oil_volume + " ml";
+            document.getElementById("baseVolume").textContent   = data.base_volume + " ml";
+            document.getElementById("totalVolume").textContent  = data.total_volume + " ml";
+
+            if (data.has_costs) {
+                document.getElementById("oilCost").textContent    = peso(data.oil_cost);
+                document.getElementById("baseCost").textContent   = peso(data.base_cost);
+                document.getElementById("liquidCost").textContent = peso(data.liquid_cost);
+                document.getElementById("bottleCost").textContent = peso(data.bottle_cost);
+                document.getElementById("totalCost").textContent  = peso(data.total_cost);
+                document.getElementById("costPerMl").textContent  = peso(data.cost_per_ml_output) + " / ml";
+                costSection.style.display = "block";
+            }
+
+            if (data.warning) {
+                warningEl.textContent   = data.warning;
+                warningEl.style.display = "block";
+            }
+
+            resultsEl.classList.add("show");
+        } catch (err) {
+            errorEl.textContent = "Network error. Please try again.";
+            errorEl.classList.add("show");
         }
-    </script>
+    });
+
+    function toggleAbout() {
+        const strip   = document.getElementById("aboutStrip");
+        const body    = document.getElementById("aboutBody");
+        const chevron = document.getElementById("aboutChevron");
+        const hint    = document.getElementById("aboutHint");
+        const isOpen  = body.classList.contains("open");
+
+        body.classList.toggle("open", !isOpen);
+        chevron.classList.toggle("open", !isOpen);
+        strip.classList.toggle("collapsed", isOpen);
+        hint.textContent = isOpen ? "tap to read our story" : "tap to close";
+    }
+
+    function downloadReceipt() {
+        const receipt = document.getElementById("results");
+        const btn     = document.getElementById("downloadBtn");
+        btn.style.display = "none";
+        html2canvas(receipt, { backgroundColor: "#faf5ee", scale: 2 }).then(canvas => {
+            const link    = document.createElement("a");
+            link.download = "halimuyak-receipt.png";
+            link.href     = canvas.toDataURL();
+            link.click();
+            btn.style.display = "block";
+        });
+    }
+</script>
 </body>
 </html>
