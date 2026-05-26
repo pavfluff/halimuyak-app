@@ -377,8 +377,7 @@
 <div class="container">
     <!-- ── Logo header ── -->
     <div class="logo-header">
-    <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
-
+        <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
         <p class="subtitle">
             Small DIY Perfumery
             <br>
@@ -389,7 +388,7 @@
     <!-- ── About strip ── -->
     <div class="about-strip collapsed" id="aboutStrip" onclick="toggleAbout()">
         <div class="about-logo">
-                 <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
+            <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
         </div>
         <div class="about-strip-text">
             <div class="about-strip-name">About Halimuyak</div>
@@ -399,16 +398,16 @@
     </div>
     <div class="about-body" id="aboutBody">
         <p>
-        Halimuyak aims to make luxury-inspired scents 
-        affordable and personal for everyone by giving customers 
-        the freedom to choose their own fragrance concentration. 
-        We believe that everyone deserves a 
-        signature scent that matches their personality, style, and budget.
+            Halimuyak aims to make luxury-inspired scents
+            affordable and personal for everyone by giving customers
+            the freedom to choose their own fragrance concentration.
+            We believe that everyone deserves a
+            signature scent that matches their personality, style, and budget.
         </p>
         <p>
-        As a small growing business, we sincerely thank you for 
-        your patience, support, and understanding as we continue 
-        to learn and improve along the way.
+            As a small growing business, we sincerely thank you for
+            your patience, support, and understanding as we continue
+            to learn and improve along the way.
         </p>
     </div>
 
@@ -468,6 +467,26 @@
             <input type="hidden" id="bottle_cost" value="0">
         </div>
 
+        <!-- ── Crochet Bag Add-on ── -->
+        <div class="section-header">Crochet Bag Add-on</div>
+
+        <div class="form-group">
+            <label>Add a Crochet Bag?</label>
+            <div class="card-picker" id="crochetPicker">
+                <div class="picker-card selected" data-value="0">
+                    <div class="img-placeholder">🚫</div>
+                    <div class="card-name">No Crochet Bag</div>
+                    <div class="card-price">₱0</div>
+                </div>
+                <div class="picker-card" data-value="15">
+                    <img src="/static/images/addons/crochet.png" alt="Crochet Bag">
+                    <div class="card-name">Crochet Bag</div>
+                    <div class="card-price">₱15.00</div>
+                </div>
+            </div>
+            <input type="hidden" id="crochet_cost" value="0">
+        </div>
+
         <div class="fixed-cost-note">
             Perfume base cost is fixed at <strong>₱1.00</strong> per ml.
         </div>
@@ -522,6 +541,10 @@
                 <span class="result-label" style="font-weight:bold;">Bottle / Packaging:</span>
                 <span class="result-value" id="bottleCost"></span>
             </div>
+            <div class="result-row">
+                <span class="result-label" style="font-weight:bold;">Crochet Bag:</span>
+                <span class="result-value" id="crochetCostDisplay"></span>
+            </div>
             <div class="result-row total">
                 <span class="result-label">Total Cost:</span>
                 <span class="result-value" id="totalCost"></span>
@@ -541,14 +564,12 @@
 </div>
 
 <script>
-    const BASE_OIL_COST = 1;
-    const TYPE_KEY_MAP  = { edp: "edp", edt: "edt", edc: "edc" };
+    const BASE_OIL_COST  = 1;
+    const CROCHET_PRICE  = 15; // ← update this to match your actual crochet bag price
+    const TYPE_KEY_MAP   = { edp: "edp", edt: "edt", edc: "edc" };
 
     // ─────────────────────────────────────────────────────────────────────
     // OIL IMAGES
-    // Key = the "label" value from your Google Sheet (must match exactly).
-    // Value = path inside your static/images/oils/ folder.
-    // Add one entry per fragrance oil you carry.
     // ─────────────────────────────────────────────────────────────────────
     const OIL_IMAGES = {
         "Chanel Bleu (M)":                        "/static/images/oils/bleu_de_chanel.png",
@@ -575,8 +596,6 @@
 
     // ─────────────────────────────────────────────────────────────────────
     // BOTTLE OPTIONS
-    // Add your local image paths in the `image` field.
-    // Leave image as "" to keep the emoji placeholder.
     // ─────────────────────────────────────────────────────────────────────
     const BOTTLE_OPTIONS = {
         50: [
@@ -590,7 +609,7 @@
         ],
     };
 
-    // ── Wire up oil cards: swap placeholder for real image if OIL_IMAGES has a match ──
+    // ── Wire up oil cards ────────────────────────────────────────────────
     const oilPicker  = document.getElementById("oilPicker");
     const oilHidden  = document.getElementById("oil_cost_per_ml");
     const oilCards   = oilPicker.querySelectorAll(".picker-card");
@@ -613,7 +632,6 @@
         });
     });
 
-    // Select first oil card by default
     if (oilCards.length > 0) {
         oilCards[0].classList.add("selected");
         oilHidden.value = oilCards[0].dataset.value;
@@ -662,6 +680,18 @@
     volumeSelect.addEventListener("change", refreshBottlePicker);
     refreshBottlePicker();
 
+    // ── Crochet picker ───────────────────────────────────────────────────
+    const crochetPicker = document.getElementById("crochetPicker");
+    const crochetHidden = document.getElementById("crochet_cost");
+
+    crochetPicker.querySelectorAll(".picker-card").forEach(card => {
+        card.addEventListener("click", () => {
+            crochetPicker.querySelectorAll(".picker-card").forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            crochetHidden.value = card.dataset.value;
+        });
+    });
+
     // ── Helpers ──────────────────────────────────────────────────────────
     const peso = n =>
         "₱" + Number(n).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -687,6 +717,8 @@
         const selectedOilCard  = oilPicker.querySelector(".picker-card.selected");
         const selectedOilLabel = selectedOilCard ? selectedOilCard.querySelector(".card-name").textContent : "—";
 
+        const crochetVal = parseFloat(crochetHidden.value || 0);
+
         const payload = {
             total_volume:     volumeSelect.value,
             oil_percentage:   oilPct,
@@ -694,6 +726,7 @@
             oil_cost_per_ml:  oilHidden.value || 0,
             base_cost_per_ml: BASE_OIL_COST,
             bottle_cost:      bottleHidden.value,
+            crochet_cost:     crochetVal,
         };
 
         try {
@@ -721,12 +754,24 @@
             document.getElementById("totalVolume").textContent  = data.total_volume + " ml";
 
             if (data.has_costs) {
-                document.getElementById("oilCost").textContent    = peso(data.oil_cost);
-                document.getElementById("baseCost").textContent   = peso(data.base_cost);
-                document.getElementById("liquidCost").textContent = peso(data.liquid_cost);
-                document.getElementById("bottleCost").textContent = peso(data.bottle_cost);
-                document.getElementById("totalCost").textContent  = peso(data.total_cost);
-                document.getElementById("costPerMl").textContent  = peso(data.cost_per_ml_output) + " / ml";
+                const crochetCost = data.crochet_cost !== undefined ? data.crochet_cost : crochetVal;
+                const serverTotal = data.total_cost !== undefined ? data.total_cost : null;
+                const finalTotal  = serverTotal !== null
+                    ? parseFloat(serverTotal) + crochetVal
+                    : null;
+
+                document.getElementById("oilCost").textContent           = peso(data.oil_cost);
+                document.getElementById("baseCost").textContent          = peso(data.base_cost);
+                document.getElementById("liquidCost").textContent        = peso(data.liquid_cost);
+                document.getElementById("bottleCost").textContent        = peso(data.bottle_cost);
+                document.getElementById("crochetCostDisplay").textContent = peso(crochetCost);
+                document.getElementById("totalCost").textContent         = finalTotal !== null
+                    ? peso(finalTotal)
+                    : peso(parseFloat(data.total_cost || 0) + crochetVal);
+                document.getElementById("costPerMl").textContent         = peso(
+                    (parseFloat(data.liquid_cost || 0) + parseFloat(data.bottle_cost || 0) + crochetVal)
+                    / parseFloat(data.total_volume || 1)
+                ) + " / ml";
                 costSection.style.display = "block";
             }
 
