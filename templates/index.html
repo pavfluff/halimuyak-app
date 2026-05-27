@@ -801,12 +801,16 @@
     }
 
     function downloadReceipt() {
-        const receipt = document.getElementById("results");
-        const btn     = document.getElementById("downloadBtn");
-        btn.style.display = "none";
+        const receipt      = document.getElementById("results");
+        const btn          = document.getElementById("downloadBtn");
+        const customerName = document.getElementById("customer_name").value.trim() || "Customer";
+        const fragOil      = document.getElementById("fragName").textContent.trim() || "Fragrance";
+        const sanitize     = str => str.replace(/[^a-z0-9_\-\s]/gi, "").trim().replace(/\s+/g, "-");
+        const fileName     = sanitize(customerName) + "_" + sanitize(fragOil);
+        btn.style.display  = "none";
         html2canvas(receipt, { backgroundColor: "#faf5ee", scale: 2 }).then(canvas => {
             const link    = document.createElement("a");
-            link.download = "halimuyak-receipt.png";
+            link.download = fileName + ".png";
             link.href     = canvas.toDataURL();
             link.click();
             btn.style.display = "block";
