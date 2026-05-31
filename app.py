@@ -7,8 +7,18 @@ import string
 from datetime import datetime
 import gspread
 from google.oauth2.service_account import Credentials
+import os
+import json
 
 app = Flask(__name__)
+
+credentials_dict = json.loads(
+    os.environ["GOOGLE_CREDENTIALS"]
+)
+
+credentials = Credentials.from_service_account_info(
+    credentials_dict
+)
 
 # ── Google Sheet config ───────────────────────────────────────────────────────
 CREDENTIALS_FILE = "halimuyak.json"          # ← path to your service account JSON
