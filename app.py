@@ -14,7 +14,7 @@ import base64
 app = Flask(__name__)
 
 credentials_json = base64.b64decode(
-    os.environ["GOOGLE_CREDENTIALS_B64"]
+    os.environ["GOOGLE_CREDENTIALS_BASE64"]
 ).decode("utf-8")
 
 credentials_dict = json.loads(credentials_json)
