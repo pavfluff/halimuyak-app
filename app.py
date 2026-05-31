@@ -9,23 +9,20 @@ import gspread
 from google.oauth2.service_account import Credentials
 import os
 import json
-import base64
 
 app = Flask(__name__)
-
-credentials_json = base64.b64decode(
-    os.environ["GOOGLE_CREDENTIALS_BASE64"]
-).decode("utf-8")
-
-credentials_dict = json.loads(credentials_json)
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
 
+credentials_info = json.loads(
+    os.environ["GOOGLE_CREDENTIALS"]
+)
+
 credentials = Credentials.from_service_account_info(
-    credentials_dict,
+    credentials_info,
     scopes=SCOPES
 )
 
