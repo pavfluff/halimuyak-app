@@ -17,14 +17,15 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-credentials_dict = json.loads(
-    os.environ["GOOGLE_CREDENTIALS"]
-)
-
-credentials = Credentials.from_service_account_info(
-    credentials_dict,
-    scopes=SCOPES
-)
+credentials = Credentials.from_service_account_info({
+    "type": "service_account",
+    "project_id": os.environ["GOOGLE_PROJECT_ID"],
+    "private_key_id": os.environ["GOOGLE_PRIVATE_KEY_ID"],
+    "private_key": os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n"),
+    "client_email": os.environ["GOOGLE_CLIENT_EMAIL"],
+    "client_id": os.environ["GOOGLE_CLIENT_ID"],
+    "token_uri": "https://oauth2.googleapis.com/token",
+}, scopes=SCOPES)
 
 # ── Google Sheet config ───────────────────────────────────────────────────────
 CREDENTIALS_FILE = "halimuyak.json"          # ← path to your service account JSON
