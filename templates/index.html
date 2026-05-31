@@ -240,6 +240,49 @@
             background: #6b4423;
             color: #fff;
         }
+
+        .status-card {
+            background: #faf5ee;
+            border: 1px solid #e8d8c0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 24px;
+        }
+
+        .status-card button {
+            width: 100%;
+            padding: 12px;
+            background: #6b4423;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .order-status-result {
+            display: none;
+            margin-top: 10px;
+            padding: 14px;
+            background: #fff;
+            border-left: 4px solid #6b4423;
+            border-radius: 6px;
+            color: #6b4423;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .order-status-result.show {
+            display: block;
+        }
+
+        .order-status-result.error {
+            border-left-color: #c0392b;
+            color: #c0392b;
+            background: #fadbd8;
+        }
     </style>
 </head>
 <body>
@@ -276,6 +319,19 @@
             As a small growing business, we sincerely thank you for your patience,
             support, and understanding as we continue to learn and improve along the way.
         </p>
+    </div>
+
+    <div class="status-card">
+        <div class="section-header">Check Order Status</div>
+
+        <div class="form-group">
+            <label for="status_order_id">Enter Order ID</label>
+            <input type="text" id="status_order_id" placeholder="e.g., HLM-AB12">
+        </div>
+
+        <button type="button" onclick="checkOrderStatus()">Check Status</button>
+
+        <div class="order-status-result" id="orderStatusResult"></div>
     </div>
 
     <form id="perfumeForm">
@@ -766,6 +822,50 @@
         document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("selected"));
         el.classList.add("selected");
         document.getElementById("advertised_by").value = el.dataset.value;
+        }
+
+        async function checkOrderStatus() {
+        const orderId = document.getElementById("status_order_id").value.trim();
+        const resultEl = document.getElementById("orderStatusResult");
+
+        resultEl.className = "order-status-result";
+        resultEl.textContent = "";
+
+        if (!orderId) {
+            resultEl.textContent = "Please enter your Order ID.";
+            resultEl.classList.add("show", "error");
+            return;
+        }
+
+        try {
+            const res = await fetch("/check_order_status", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ order_id: orderId })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                resultEl.textContent = data.error || "Order not found.";
+                resultEl.classList.add("show", "error");
+                return;
+            }
+
+            resultEl.innerHTML = `
+                <strong>Order ID:</strong> ${data.order_id}<br>
+                <strong>Name:</strong> ${data.customer_name}<br>
+                <strong>Order Date:</strong> ${data.order_date}<br>
+                <strong>Status:</strong> ${data.status}<br>
+                ${data.comment ? `<strong>Comment:</strong> ${data.comment}` : ""}
+            `;
+
+            resultEl.classList.add("show");
+
+        } catch (err) {
+            resultEl.textContent = "Network error. Please try again.";
+            resultEl.classList.add("show", "error");
+        }
     }
 </script>
 </body>

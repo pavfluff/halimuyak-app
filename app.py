@@ -26,16 +26,6 @@ credentials = Credentials.from_service_account_info(
     scopes=SCOPES
 )
 
-# credentials = Credentials.from_service_account_info({
-#     "type": "service_account",
-#     "project_id": os.environ["GOOGLE_PROJECT_ID"],
-#     "private_key_id": os.environ["GOOGLE_PRIVATE_KEY_ID"],
-#     "private_key": os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n"),
-#     "client_email": os.environ["GOOGLE_CLIENT_EMAIL"],
-#     "client_id": os.environ["GOOGLE_CLIENT_ID"],
-#     "token_uri": "https://oauth2.googleapis.com/token",
-# }, scopes=SCOPES)
-
 # ── Google Sheet config ───────────────────────────────────────────────────────
 CREDENTIALS_FILE = "halimuyak.json"          # ← path to your service account JSON
 SHEET_ID         = "1l_PT8imyyLRGU3yD0-Td6kHn7h52MxDmHItYb9UNzq0" # ← the long ID from your sheet URL
@@ -193,6 +183,33 @@ def place_order():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/check_order_status", methods=["POST"])
+def check_order_status():
+    try:
+        data = request.get_json()
+        order_id = data.get("order_id", "").strip().upper()
+
+        if not order_id:
+            return jsonify({"error": "Please enter an Order ID"}), 400
+
+        ws = get_orders_sheet()
+        all_values = ws.get_all_values()
+
+        for row in all_values[1:]:  # skip header
+            if len(row) > 0 and row[0].strip().upper() == order_id:
+                return jsonify({
+                    "success": True,
+                    "order_id": row[0],
+                    "order_date": row[1] if len(row) > 1 else "",
+                    "customer_name": row[2] if len(row) > 2 else "",
+                    "status": row[11] if len(row) > 11 else "Pending",
+                    "comment": row[12] if len(row) > 12 else ""
+                })
+
+        return jsonify({"error": "Order ID not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
