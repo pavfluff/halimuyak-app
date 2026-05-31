@@ -12,23 +12,24 @@ import json
 
 app = Flask(__name__)
 
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive",
+]
+
 credentials_dict = json.loads(
     os.environ["GOOGLE_CREDENTIALS"]
 )
 
 credentials = Credentials.from_service_account_info(
-    credentials_dict
+    credentials_dict,
+    scopes=SCOPES
 )
 
 # ── Google Sheet config ───────────────────────────────────────────────────────
 CREDENTIALS_FILE = "halimuyak.json"          # ← path to your service account JSON
 SHEET_ID         = "1l_PT8imyyLRGU3yD0-Td6kHn7h52MxDmHItYb9UNzq0" # ← the long ID from your sheet URL
 ORDERS_TAB       = "Orders - Auto"           # ← exact tab name
-
-SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
-]
 
 def get_orders_sheet():
     """Return the gspread worksheet for orders."""
