@@ -4,4 +4,3 @@ requests
 openpyxl
 gspread
 google-auth
-base64
