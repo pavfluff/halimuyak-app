@@ -41,12 +41,6 @@
             margin-bottom: 12px;
         }
 
-        .logo-placeholder {
-            font-size: 80px;
-            line-height: 1;
-            margin-bottom: 12px;
-        }
-
         h2 { color: #6b4423; text-align: center; margin-bottom: 6px; font-size: 26px; }
 
         .subtitle {
@@ -57,17 +51,9 @@
             font-style: italic;
         }
 
-        .about-body p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
+        .owners { font-size: 10px; opacity: 0.5; }
 
-        .owners {
-            font-size: 10px;
-            opacity: 0.5;
-        }
-
-        /* ── About strip ─────────────────────────────────────────────── */
+        /* ── About strip ── */
         .about-strip {
             display: flex;
             align-items: center;
@@ -81,306 +67,189 @@
             transition: background 0.15s;
             margin-bottom: 0;
         }
-
-        .about-strip.collapsed {
-            border-radius: 8px;
-            margin-bottom: 24px;
-        }
-
+        .about-strip.collapsed { border-radius: 8px; margin-bottom: 24px; }
         .about-strip:hover { background: #f5ede0; }
 
         .about-logo {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #e8d8c0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-            overflow: hidden;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: #e8d8c0; display: flex; align-items: center;
+            justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden;
         }
-
-        .about-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
+        .about-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
         .about-strip-text { flex: 1; }
+        .about-strip-name { font-size: 14px; font-weight: bold; color: #6b4423; margin-bottom: 2px; }
+        .about-strip-hint { font-size: 12px; color: #a0826d; font-style: italic; }
+        .about-chevron { color: #a0826d; font-size: 18px; transition: transform 0.25s; line-height: 1; }
+        .about-chevron.open { transform: rotate(180deg); }
+        .about-body {
+            background: #faf5ee; border: 1px solid #e8d8c0; border-top: none;
+            border-radius: 0 0 8px 8px; padding: 14px 16px 16px;
+            font-size: 13px; color: #6b4423; line-height: 1.7; margin-bottom: 24px; display: none;
+        }
+        .about-body p { margin-bottom: 15px; line-height: 1.6; }
+        .about-body.open { display: block; }
 
-        .about-strip-name {
-            font-size: 14px;
+        /* ── Section header ── */
+        .section-header {
+            color: #6b4423; font-size: 13px; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #e8d8c0;
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        label { display: block; margin-bottom: 8px; color: #6b4423; font-weight: bold; font-size: 14px; }
+
+        input[type="text"], select {
+            width: 100%; padding: 12px; border: 2px solid #d4b896;
+            border-radius: 6px; font-size: 16px; font-family: inherit;
+            background: #fff; transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, select:focus { outline: none; border-color: #6b4423; }
+
+        .card-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+
+        .picker-card {
+            border: 2px solid #e8d8c0; border-radius: 8px; padding: 10px;
+            cursor: pointer; transition: border-color 0.18s, box-shadow 0.18s;
+            background: #fff; text-align: center; user-select: none;
+        }
+        .picker-card:hover { border-color: #a0826d; box-shadow: 0 2px 8px rgba(107,68,35,0.10); }
+        .picker-card.selected { border-color: #6b4423; background: #faf5ee; box-shadow: 0 2px 10px rgba(107,68,35,0.15); }
+        .picker-card img { width: 64px; height: 64px; object-fit: contain; border-radius: 4px; margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto; }
+        .picker-card .img-placeholder { width: 64px; height: 64px; background: #f5e6d3; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 26px; }
+        .picker-card .card-name { font-size: 12px; font-weight: bold; color: #6b4423; line-height: 1.3; margin-bottom: 4px; }
+        .picker-card .card-price { font-size: 13px; color: #a0826d; }
+        .picker-card.selected .card-price { color: #6b4423; font-weight: bold; }
+
+        .fixed-cost-note {
+            background: #faf5ee; color: #6b4423; border: 1px solid #e8d8c0;
+            border-radius: 6px; padding: 12px; font-size: 14px; margin-bottom: 18px;
+        }
+
+        button[type="submit"] {
+            width: 100%; padding: 14px; background: #6b4423; color: #fff;
+            border: none; border-radius: 6px; font-size: 16px; font-weight: bold;
+            cursor: pointer; transition: background 0.2s; font-family: inherit;
+            letter-spacing: 1px; margin-top: 14px;
+        }
+        button[type="submit"]:hover { background: #523319; }
+
+        /* ── Results ── */
+        .results {
+            margin-top: 30px; padding: 24px; background: #faf5ee;
+            border-radius: 8px; border-left: 4px solid #6b4423; display: none;
+        }
+        .results.show { display: block; }
+        .results h2 { color: #6b4423; margin-bottom: 16px; font-size: 20px; }
+
+        .perfume-label {
+            background: #6b4423; color: #fff; padding: 8px 14px;
+            border-radius: 4px; display: inline-block; margin-bottom: 16px;
+            font-size: 13px; letter-spacing: 0.5px;
+        }
+
+        .result-section-title {
+            color: #6b4423; font-size: 12px; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 6px;
+        }
+
+        .result-row {
+            display: flex; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px solid #e8d8c0;
+        }
+        .result-row.total {
+            border-bottom: none; border-top: 2px solid #6b4423; font-weight: bold;
+            color: #6b4423; padding-top: 12px; margin-top: 4px; font-size: 17px;
+        }
+        .result-label { color: #8b6f47; }
+        .result-value { font-weight: bold; color: #523319; }
+
+        .warning {
+            background: #fdf3d8; color: #8a6d1f; padding: 10px 12px;
+            border-radius: 6px; font-size: 13px; margin-top: 16px;
+            border-left: 3px solid #d4a93a;
+        }
+
+        .error {
+            color: #c0392b; background: #fadbd8; padding: 12px;
+            border-radius: 6px; margin-top: 16px; display: none;
+        }
+        .error.show { display: block; }
+
+        /* ── Order ID banner ── */
+        .order-id-banner {
+            display: none;
+            background: #fff;
+            border: 2px solid #6b4423;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .order-id-banner.show { display: block; }
+        .order-id-banner .banner-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a0826d;
+            margin-bottom: 6px;
+        }
+        .order-id-banner .banner-id {
+            font-size: 28px;
             font-weight: bold;
             color: #6b4423;
-            margin-bottom: 2px;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
         }
-
-        .about-strip-hint {
+        .order-id-banner .banner-note {
             font-size: 12px;
             color: #a0826d;
             font-style: italic;
         }
 
-        .about-chevron {
-            color: #a0826d;
-            font-size: 18px;
-            transition: transform 0.25s;
-            line-height: 1;
+        /* ── Place Order button ── */
+        #placeOrderBtn {
+            width: 100%; padding: 14px; background: #3a7d44; color: #fff;
+            border: none; border-radius: 6px; font-size: 16px; font-weight: bold;
+            cursor: pointer; font-family: inherit; margin-top: 16px;
+            letter-spacing: 1px; transition: background 0.2s;
         }
+        #placeOrderBtn:hover { background: #2e6235; }
+        #placeOrderBtn:disabled { background: #a0c4a8; cursor: not-allowed; }
 
-        .about-chevron.open { transform: rotate(180deg); }
-
-        .about-body {
-            background: #faf5ee;
-            border: 1px solid #e8d8c0;
-            border-top: none;
-            border-radius: 0 0 8px 8px;
-            padding: 14px 16px 16px;
-            font-size: 13px;
-            color: #6b4423;
-            line-height: 1.7;
-            margin-bottom: 24px;
-            display: none;
-        }
-
-        .about-body.open { display: block; }
-
-        /* ── Section header ──────────────────────────────────────────── */
-        .section-header {
-            color: #6b4423;
-            font-size: 13px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 24px 0 12px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #e8d8c0;
-        }
-
-        .form-group { margin-bottom: 18px; }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #6b4423;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #d4b896;
-            border-radius: 6px;
-            font-size: 16px;
-            font-family: inherit;
-            background: #fff;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: #6b4423;
-        }
-
-        .card-picker {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-        }
-
-        .picker-card {
-            border: 2px solid #e8d8c0;
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            transition: border-color 0.18s, box-shadow 0.18s;
-            background: #fff;
-            text-align: center;
-            user-select: none;
-        }
-
-        .picker-card:hover {
-            border-color: #a0826d;
-            box-shadow: 0 2px 8px rgba(107,68,35,0.10);
-        }
-
-        .picker-card.selected {
-            border-color: #6b4423;
-            background: #faf5ee;
-            box-shadow: 0 2px 10px rgba(107,68,35,0.15);
-        }
-
-        .picker-card img {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-            border-radius: 4px;
-            margin-bottom: 6px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .picker-card .img-placeholder {
-            width: 64px;
-            height: 64px;
-            background: #f5e6d3;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 6px;
-            font-size: 26px;
-        }
-
-        .picker-card .card-name {
-            font-size: 12px;
-            font-weight: bold;
-            color: #6b4423;
-            line-height: 1.3;
-            margin-bottom: 4px;
-        }
-
-        .picker-card .card-price {
-            font-size: 13px;
-            color: #a0826d;
-        }
-
-        .picker-card.selected .card-price {
-            color: #6b4423;
-            font-weight: bold;
-        }
-
-        .fixed-cost-note {
-            background: #faf5ee;
-            color: #6b4423;
-            border: 1px solid #e8d8c0;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 14px;
-            background: #6b4423;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-family: inherit;
-            letter-spacing: 1px;
-            margin-top: 14px;
-        }
-
-        button[type="submit"]:hover { background: #523319; }
-
-        .results {
-            margin-top: 30px;
-            padding: 24px;
-            background: #faf5ee;
-            border-radius: 8px;
-            border-left: 4px solid #6b4423;
-            display: none;
-        }
-
-        .results.show { display: block; }
-        .results h2 { color: #6b4423; margin-bottom: 16px; font-size: 20px; }
-
-        .perfume-label {
-            background: #6b4423;
-            color: #fff;
-            padding: 8px 14px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 16px;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-
-        .result-section-title {
-            color: #6b4423;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 18px 0 6px;
-        }
-
-        .result-row {
-            display: flex;
-            justify-content: space-between;
+        /* ── Advertised By toggle buttons ── */
+        .toggle-btn {
+            flex: 1;
             padding: 10px 0;
-            border-bottom: 1px solid #e8d8c0;
-        }
-
-        .result-row.total {
-            border-bottom: none;
-            border-top: 2px solid #6b4423;
-            font-weight: bold;
-            color: #6b4423;
-            padding-top: 12px;
-            margin-top: 4px;
-            font-size: 17px;
-        }
-
-        .result-label { color: #8b6f47; }
-        .result-value { font-weight: bold; color: #523319; }
-
-        .warning {
-            background: #fdf3d8;
-            color: #8a6d1f;
-            padding: 10px 12px;
+            border: 2px solid #e8d8c0;
             border-radius: 6px;
-            font-size: 13px;
-            margin-top: 16px;
-            border-left: 3px solid #d4a93a;
-        }
-
-        .error {
-            color: #c0392b;
-            background: #fadbd8;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 16px;
-            display: none;
-        }
-
-        .error.show { display: block; }
-
-        #downloadBtn {
-            width: 100%;
-            padding: 12px;
-            background: #a0826d;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: bold;
+            text-align: center;
             cursor: pointer;
             font-family: inherit;
-            margin-top: 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #a0826d;
+            background: #fff;
+            user-select: none;
+            transition: border-color 0.18s, background 0.18s, color 0.18s;
         }
-
-        #downloadBtn:hover { background: #8b6f47; }
+        .toggle-btn:hover { border-color: #a0826d; }
+        .toggle-btn.selected {
+            border-color: #6b4423;
+            background: #6b4423;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
 <div class="container">
+
     <!-- ── Logo header ── -->
     <div class="logo-header">
         <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
         <p class="subtitle">
-            Small DIY Perfumery
-            <br>
+            Small DIY Perfumery<br>
             <span class="owners">by Alena, Tristan, & Aging</span>
         </p>
     </div>
@@ -398,16 +267,14 @@
     </div>
     <div class="about-body" id="aboutBody">
         <p>
-            Halimuyak aims to make luxury-inspired scents
-            affordable and personal for everyone by giving customers
-            the freedom to choose their own fragrance concentration.
-            We believe that everyone deserves a
-            signature scent that matches their personality, style, and budget.
+            Halimuyak aims to make luxury-inspired scents affordable and personal
+            for everyone by giving customers the freedom to choose their own
+            fragrance concentration. We believe that everyone deserves a signature
+            scent that matches their personality, style, and budget.
         </p>
         <p>
-            As a small growing business, we sincerely thank you for
-            your patience, support, and understanding as we continue
-            to learn and improve along the way.
+            As a small growing business, we sincerely thank you for your patience,
+            support, and understanding as we continue to learn and improve along the way.
         </p>
     </div>
 
@@ -418,6 +285,16 @@
         <div class="form-group">
             <label for="customer_name">Customer Name</label>
             <input type="text" id="customer_name" placeholder="e.g., Juan dela Cruz">
+        </div>
+
+        <div class="form-group">
+            <label>Advertised By</label>
+            <div style="display:flex; gap:10px;">
+                <div class="toggle-btn selected" data-value="Aging" onclick="selectAdvertiser(this)">Aging</div>
+                <div class="toggle-btn" data-value="Alena" onclick="selectAdvertiser(this)">Alena</div>
+                <div class="toggle-btn" data-value="None" onclick="selectAdvertiser(this)">None</div>
+            </div>
+            <input type="hidden" id="advertised_by" value="Aging">
         </div>
 
         <div class="section-header">Formula</div>
@@ -496,14 +373,20 @@
 
     <div class="error" id="error"></div>
 
+    <!-- ── Results (captured for receipt image) ── -->
     <div class="results" id="results">
         <h2>Your Formula</h2>
         <div style="margin-bottom:12px; color:#8b6f47; font-size:14px;">
             Prepared for: <strong id="displayName" style="color:#6b4423;"></strong>
         </div>
-        <div style="margin-bottom:12px; color:#8b6f47; font-size:14px;">
+        <div style="margin-bottom:6px; color:#8b6f47; font-size:14px;">
             Order Date: <strong id="displayDate" style="color:#6b4423;"></strong>
         </div>
+        <!-- Order ID shown on receipt image after order is placed -->
+        <div id="receiptOrderIdRow" style="display:none; margin-bottom:12px; color:#8b6f47; font-size:14px;">
+            Order ID: <strong id="receiptOrderId" style="color:#6b4423; letter-spacing:2px;"></strong>
+        </div>
+
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
             <div class="perfume-label" id="perfumeLabel"></div>
             <div class="perfume-label" id="fragName"></div>
@@ -557,20 +440,31 @@
 
         <div class="warning" id="warning" style="display:none;"></div>
 
-        <button type="button" id="downloadBtn" onclick="downloadReceipt()">
-            📥 Download Receipt
+        <!-- Place Order button (replaces old Download Receipt) -->
+        <button type="button" id="placeOrderBtn" onclick="placeOrder()">
+            🛒 Place Order
         </button>
     </div>
+
+    <!-- ── Order ID banner (shown below results after order placed) ── -->
+    <div class="order-id-banner" id="orderIdBanner">
+        <div class="banner-title">Your Order ID</div>
+        <div class="banner-id" id="bannerOrderId"></div>
+        <div class="banner-note">Screenshot or save this ID to track your order status 📋</div>
+    </div>
+
 </div>
 
 <script>
-    const BASE_OIL_COST  = 1;
-    const CROCHET_PRICE  = 15; // ← update this to match your actual crochet bag price
-    const TYPE_KEY_MAP   = { edp: "edp", edt: "edt", edc: "edc" };
+    const BASE_OIL_COST = 1;
+    const TYPE_KEY_MAP  = { edp: "edp", edt: "edt", edc: "edc" };
 
-    // ─────────────────────────────────────────────────────────────────────
-    // OIL IMAGES
-    // ─────────────────────────────────────────────────────────────────────
+    // ── Stored state ─────────────────────────────────────────────────────
+    let lastResult      = null;
+    let lastOilLabel    = null;
+    let lastBottleLabel = null;
+
+    // ── Oil images ───────────────────────────────────────────────────────
     const OIL_IMAGES = {
         "Chanel Bleu (M)":                        "/static/images/oils/bleu_de_chanel.png",
         "Burberry Weekend (M)":                   "/static/images/oils/burberry_weekend.png",
@@ -596,37 +490,33 @@
         "Montblanc Legend (M)":                   "/static/images/oils/montblanc_legend.png",
     };
 
-    // ─────────────────────────────────────────────────────────────────────
-    // BOTTLE OPTIONS
-    // ─────────────────────────────────────────────────────────────────────
+    // ── Bottle options ───────────────────────────────────────────────────
     const BOTTLE_OPTIONS = {
         50: [
-            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                        emoji: "🚫" },
-            { value: "30", label: "50 ml Clear Glass",          price: "₱30.00", image: "/static/images/bottles/clear-50ml.png",   emoji: "🫙" },
+            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                       emoji: "🚫" },
+            { value: "30", label: "50 ml Clear Glass",          price: "₱30.00", image: "/static/images/bottles/clear-50ml.png",  emoji: "🫙" },
         ],
         100: [
-            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                        emoji: "🚫" },
-            { value: "35", label: "100 ml Clear Glass",         price: "₱35.00", image: "/static/images/bottles/clear-100ml.png",  emoji: "🫙" },
-            { value: "55", label: "100 ml Gold Cap",            price: "₱55.00", image: "/static/images/bottles/gold-100ml.png",   emoji: "✨" },
+            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                       emoji: "🚫" },
+            { value: "35", label: "100 ml Clear Glass",         price: "₱35.00", image: "/static/images/bottles/clear-100ml.png", emoji: "🫙" },
+            { value: "55", label: "100 ml Gold Cap",            price: "₱55.00", image: "/static/images/bottles/gold-100ml.png",  emoji: "✨" },
         ],
     };
 
     // ── Wire up oil cards ────────────────────────────────────────────────
-    const oilPicker  = document.getElementById("oilPicker");
-    const oilHidden  = document.getElementById("oil_cost_per_ml");
-    const oilCards   = oilPicker.querySelectorAll(".picker-card");
+    const oilPicker = document.getElementById("oilPicker");
+    const oilHidden = document.getElementById("oil_cost_per_ml");
+    const oilCards  = oilPicker.querySelectorAll(".picker-card");
 
-    oilCards.forEach((card, i) => {
-        const label = card.dataset.label;
+    oilCards.forEach(card => {
+        const label       = card.dataset.label;
         const placeholder = card.querySelector(".img-placeholder");
-
         if (OIL_IMAGES[label]) {
             const img = document.createElement("img");
             img.src = OIL_IMAGES[label];
             img.alt = label;
             placeholder.replaceWith(img);
         }
-
         card.addEventListener("click", () => {
             oilCards.forEach(c => c.classList.remove("selected"));
             card.classList.add("selected");
@@ -648,28 +538,19 @@
         containerEl.innerHTML = "";
         items.forEach((item, i) => {
             const card = document.createElement("div");
-            card.className = "picker-card" + (i === autoSelect ? " selected" : "");
+            card.className   = "picker-card" + (i === autoSelect ? " selected" : "");
             card.dataset.value = item.value;
-
             const imgHtml = item.image
                 ? `<img src="${item.image}" alt="${item.label}">`
                 : `<div class="img-placeholder">${item.emoji || "🌸"}</div>`;
-
-            card.innerHTML = `
-                ${imgHtml}
-                <div class="card-name">${item.label}</div>
-                <div class="card-price">${item.price}</div>
-            `;
-
+            card.innerHTML = `${imgHtml}<div class="card-name">${item.label}</div><div class="card-price">${item.price}</div>`;
             card.addEventListener("click", () => {
                 containerEl.querySelectorAll(".picker-card").forEach(c => c.classList.remove("selected"));
                 card.classList.add("selected");
                 hiddenInput.value = item.value;
             });
-
             containerEl.appendChild(card);
         });
-
         if (items[autoSelect]) hiddenInput.value = items[autoSelect].value;
     }
 
@@ -678,7 +559,6 @@
         const items = BOTTLE_OPTIONS[vol] || BOTTLE_OPTIONS[50];
         buildPicker(bottlePicker, bottleHidden, items, 0);
     }
-
     volumeSelect.addEventListener("change", refreshBottlePicker);
     refreshBottlePicker();
 
@@ -698,7 +578,7 @@
     const peso = n =>
         "₱" + Number(n).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    // ── Form submit ──────────────────────────────────────────────────────
+    // ── Form submit (Calculate) ──────────────────────────────────────────
     document.getElementById("perfumeForm").addEventListener("submit", async e => {
         e.preventDefault();
 
@@ -706,18 +586,26 @@
         const resultsEl   = document.getElementById("results");
         const warningEl   = document.getElementById("warning");
         const costSection = document.getElementById("costSection");
+        const banner      = document.getElementById("orderIdBanner");
 
         errorEl.classList.remove("show");
         resultsEl.classList.remove("show");
+        banner.classList.remove("show");
         warningEl.style.display   = "none";
         costSection.style.display = "none";
 
-        const selectedOpt  = document.getElementById("perfume_type").selectedOptions[0];
-        const oilPct       = parseFloat(selectedOpt.dataset.pct);
-        const backendType  = TYPE_KEY_MAP[selectedOpt.dataset.type] || "custom";
+        // Hide order ID row in receipt until order is placed
+        document.getElementById("receiptOrderIdRow").style.display = "none";
 
-        const selectedOilCard  = oilPicker.querySelector(".picker-card.selected");
-        const selectedOilLabel = selectedOilCard ? selectedOilCard.querySelector(".card-name").textContent : "—";
+        const selectedOpt = document.getElementById("perfume_type").selectedOptions[0];
+        const oilPct      = parseFloat(selectedOpt.dataset.pct);
+        const backendType = TYPE_KEY_MAP[selectedOpt.dataset.type] || "custom";
+
+        const selectedOilCard    = oilPicker.querySelector(".picker-card.selected");
+        lastOilLabel             = selectedOilCard ? selectedOilCard.querySelector(".card-name").textContent : "—";
+
+        const selectedBottleCard = bottlePicker.querySelector(".picker-card.selected");
+        lastBottleLabel          = selectedBottleCard ? selectedBottleCard.querySelector(".card-name").textContent : "—";
 
         const crochetVal = parseFloat(crochetHidden.value || 0);
 
@@ -733,9 +621,8 @@
 
         try {
             const res  = await fetch("/calculate", {
-                method:  "POST",
-                headers: { "Content-Type": "application/json" },
-                body:    JSON.stringify(payload),
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
             });
             const data = await res.json();
 
@@ -748,7 +635,7 @@
             document.getElementById("perfumeLabel").textContent = data.perfume_label + ` (${oilPct}%)`;
             document.getElementById("displayDate").textContent  = new Date().toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" });
             document.getElementById("displayName").textContent  = document.getElementById("customer_name").value || "—";
-            document.getElementById("fragName").textContent     = selectedOilLabel;
+            document.getElementById("fragName").textContent     = lastOilLabel;
             document.getElementById("oilPct").textContent       = data.oil_percentage;
             document.getElementById("basePct").textContent      = data.base_percentage;
             document.getElementById("oilVolume").textContent    = data.oil_volume + " ml";
@@ -756,24 +643,13 @@
             document.getElementById("totalVolume").textContent  = data.total_volume + " ml";
 
             if (data.has_costs) {
-                const crochetCost = data.crochet_cost !== undefined ? data.crochet_cost : crochetVal;
-                const serverTotal = data.total_cost !== undefined ? data.total_cost : null;
-                const finalTotal  = serverTotal !== null
-                    ? parseFloat(serverTotal) + crochetVal
-                    : null;
-
-                document.getElementById("oilCost").textContent           = peso(data.oil_cost);
-                document.getElementById("baseCost").textContent          = peso(data.base_cost);
-                document.getElementById("liquidCost").textContent        = peso(data.liquid_cost);
-                document.getElementById("bottleCost").textContent        = peso(data.bottle_cost);
-                document.getElementById("crochetCostDisplay").textContent = peso(crochetCost);
-                document.getElementById("totalCost").textContent         = finalTotal !== null
-                    ? peso(finalTotal)
-                    : peso(parseFloat(data.total_cost || 0) + crochetVal);
-                document.getElementById("costPerMl").textContent         = peso(
-                    (parseFloat(data.liquid_cost || 0) + parseFloat(data.bottle_cost || 0) + crochetVal)
-                    / parseFloat(data.total_volume || 1)
-                ) + " / ml";
+                document.getElementById("oilCost").textContent            = peso(data.oil_cost);
+                document.getElementById("baseCost").textContent           = peso(data.base_cost);
+                document.getElementById("liquidCost").textContent         = peso(data.liquid_cost);
+                document.getElementById("bottleCost").textContent         = peso(data.bottle_cost);
+                document.getElementById("crochetCostDisplay").textContent = peso(data.crochet_cost);
+                document.getElementById("totalCost").textContent          = peso(data.total_cost);
+                document.getElementById("costPerMl").textContent          = peso(data.cost_per_ml_output) + " / ml";
                 costSection.style.display = "block";
             }
 
@@ -782,41 +658,115 @@
                 warningEl.style.display = "block";
             }
 
+            // Store full result for Place Order
+            lastResult             = data;
+            lastResult._crochetVal = crochetVal;
+            lastResult._customerName = document.getElementById("customer_name").value || "—";
+            lastResult._oilPct     = oilPct;
+
+            // Reset Place Order button
+            const btn = document.getElementById("placeOrderBtn");
+            btn.disabled    = false;
+            btn.textContent = "🛒 Place Order";
+
             resultsEl.classList.add("show");
+
         } catch (err) {
             errorEl.textContent = "Network error. Please try again.";
             errorEl.classList.add("show");
         }
     });
 
+    // ── Place Order ──────────────────────────────────────────────────────
+    async function placeOrder() {
+        if (!lastResult) return;
+
+        const btn    = document.getElementById("placeOrderBtn");
+        const banner = document.getElementById("orderIdBanner");
+
+        btn.disabled    = true;
+        btn.textContent = "Placing order…";
+
+        const payload = {
+            customer_name:   lastResult._customerName,
+            ordered_through: document.getElementById("advertised_by").value,
+            total_volume:    lastResult.total_volume,
+            frag_oil_name:   lastOilLabel,
+            crochet_cost:    lastResult._crochetVal || 0,
+            oil_volume:      lastResult.oil_volume,
+            bottle_label:    lastBottleLabel,
+            total_cost:      lastResult.total_cost,
+            oil_percentage:  lastResult._oilPct,
+        };
+
+        try {
+            const res  = await fetch("/place_order", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                const orderId = data.order_id;
+
+                // Show order ID in the receipt area
+                document.getElementById("receiptOrderId").textContent    = orderId;
+                document.getElementById("receiptOrderIdRow").style.display = "block";
+
+                // Show big banner below results
+                document.getElementById("bannerOrderId").textContent = orderId;
+                banner.classList.add("show");
+
+                btn.textContent = "✔ Order Placed!";
+
+                // Auto-download the receipt image with order ID in filename
+                downloadReceipt(orderId, lastResult._customerName, lastOilLabel);
+
+            } else {
+                btn.disabled    = false;
+                btn.textContent = "🛒 Place Order";
+                alert("Error: " + (data.error || "Could not place order."));
+            }
+
+        } catch (err) {
+            btn.disabled    = false;
+            btn.textContent = "🛒 Place Order";
+            alert("Network error. Could not place order.");
+        }
+    }
+
+    // ── Download receipt (called automatically after order placed) ───────
+    function downloadReceipt(orderId, customerName, fragOil) {
+        const receipt  = document.getElementById("results");
+        const sanitize = str => (str || "").replace(/[^a-z0-9_\-\s]/gi, "").trim().replace(/\s+/g, "-");
+        const fileName = sanitize(customerName) + "_" + sanitize(fragOil) + "_" + orderId;
+
+        html2canvas(receipt, { backgroundColor: "#faf5ee", scale: 2 }).then(canvas => {
+            const link    = document.createElement("a");
+            link.download = fileName + ".png";
+            link.href     = canvas.toDataURL();
+            link.click();
+        });
+    }
+
+    // ── About toggle ─────────────────────────────────────────────────────
     function toggleAbout() {
         const strip   = document.getElementById("aboutStrip");
         const body    = document.getElementById("aboutBody");
         const chevron = document.getElementById("aboutChevron");
         const hint    = document.getElementById("aboutHint");
         const isOpen  = body.classList.contains("open");
-
         body.classList.toggle("open", !isOpen);
         chevron.classList.toggle("open", !isOpen);
         strip.classList.toggle("collapsed", isOpen);
         hint.textContent = isOpen ? "tap to read our story" : "tap to close";
     }
 
-    function downloadReceipt() {
-        const receipt      = document.getElementById("results");
-        const btn          = document.getElementById("downloadBtn");
-        const customerName = document.getElementById("customer_name").value.trim() || "Customer";
-        const fragOil      = document.getElementById("fragName").textContent.trim() || "Fragrance";
-        const sanitize     = str => str.replace(/[^a-z0-9_\-\s]/gi, "").trim().replace(/\s+/g, "-");
-        const fileName     = sanitize(customerName) + "_" + sanitize(fragOil);
-        btn.style.display  = "none";
-        html2canvas(receipt, { backgroundColor: "#faf5ee", scale: 2 }).then(canvas => {
-            const link    = document.createElement("a");
-            link.download = fileName + ".png";
-            link.href     = canvas.toDataURL();
-            link.click();
-            btn.style.display = "block";
-        });
+    // ── Advertised By picker ─────────────────────────────────────────────
+    function selectAdvertiser(el) {
+        document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("selected"));
+        el.classList.add("selected");
+        document.getElementById("advertised_by").value = el.dataset.value;
     }
 </script>
 </body>
