@@ -8,23 +8,36 @@ from datetime import datetime
 import gspread
 from google.oauth2.service_account import Credentials
 import os
+import json
+import base64
 
 app = Flask(__name__)
 
+credentials_json = base64.b64decode(
+    os.environ["GOOGLE_CREDENTIALS_B64"]
+).decode("utf-8")
+
+credentials_dict = json.loads(credentials_json)
+
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive"
 ]
 
-credentials = Credentials.from_service_account_info({
-    "type": "service_account",
-    "project_id": os.environ["GOOGLE_PROJECT_ID"],
-    "private_key_id": os.environ["GOOGLE_PRIVATE_KEY_ID"],
-    "private_key": os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n"),
-    "client_email": os.environ["GOOGLE_CLIENT_EMAIL"],
-    "client_id": os.environ["GOOGLE_CLIENT_ID"],
-    "token_uri": "https://oauth2.googleapis.com/token",
-}, scopes=SCOPES)
+credentials = Credentials.from_service_account_info(
+    credentials_dict,
+    scopes=SCOPES
+)
+
+# credentials = Credentials.from_service_account_info({
+#     "type": "service_account",
+#     "project_id": os.environ["GOOGLE_PROJECT_ID"],
+#     "private_key_id": os.environ["GOOGLE_PRIVATE_KEY_ID"],
+#     "private_key": os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n"),
+#     "client_email": os.environ["GOOGLE_CLIENT_EMAIL"],
+#     "client_id": os.environ["GOOGLE_CLIENT_ID"],
+#     "token_uri": "https://oauth2.googleapis.com/token",
+# }, scopes=SCOPES)
 
 # ── Google Sheet config ───────────────────────────────────────────────────────
 CREDENTIALS_FILE = "halimuyak.json"          # ← path to your service account JSON
