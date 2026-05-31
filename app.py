@@ -32,7 +32,8 @@ SCOPES = [
 
 def get_orders_sheet():
     """Return the gspread worksheet for orders."""
-    creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
+    # creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
+    creds = credentials
     gc    = gspread.authorize(creds)
     sh    = gc.open_by_key(SHEET_ID)
     return sh.worksheet(ORDERS_TAB)
