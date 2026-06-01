@@ -203,7 +203,8 @@ def check_order_status():
                     "order_date": row[1] if len(row) > 1 else "",
                     "customer_name": row[2] if len(row) > 2 else "",
                     "status": row[11] if len(row) > 11 else "Pending",
-                    "comment": row[12] if len(row) > 12 else ""
+                    "comment": row[12] if len(row) > 12 else "",
+                    "total_cost": row[10]
                 })
 
         return jsonify({"error": "Order ID not found"}), 404
