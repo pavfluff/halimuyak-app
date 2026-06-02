@@ -33,7 +33,6 @@ ORDERS_TAB       = "Orders - Auto"           # ← exact tab name
 
 def get_orders_sheet():
     """Return the gspread worksheet for orders."""
-    # creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
     creds = credentials
     gc    = gspread.authorize(creds)
     sh    = gc.open_by_key(SHEET_ID)
@@ -183,6 +182,7 @@ def place_order():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/check_order_status", methods=["POST"])
 def check_order_status():
     try:
@@ -198,19 +198,27 @@ def check_order_status():
         for row in all_values[1:]:  # skip header
             if len(row) > 0 and row[0].strip().upper() == order_id:
                 return jsonify({
-                    "success": True,
-                    "order_id": row[0],
-                    "order_date": row[1] if len(row) > 1 else "",
-                    "customer_name": row[2] if len(row) > 2 else "",
-                    "status": row[11] if len(row) > 11 else "Pending",
-                    "comment": row[12] if len(row) > 12 else "",
-                    "total_cost": row[10]
+                    "success":        True,
+                    "order_id":       row[0],
+                    "order_date":     row[1]  if len(row) > 1  else "",
+                    "customer_name":  row[2]  if len(row) > 2  else "",
+                    "ordered_through":row[3]  if len(row) > 3  else "",
+                    "total_volume":   row[4]  if len(row) > 4  else "",
+                    "frag_oil_name":  row[5]  if len(row) > 5  else "",
+                    "crochet_cost":   row[6]  if len(row) > 6  else "0",
+                    "oil_volume":     row[7]  if len(row) > 7  else "",
+                    "oil_percentage": row[8]  if len(row) > 8  else "",
+                    "bottle_label":   row[9]  if len(row) > 9  else "",
+                    "total_cost":     row[10] if len(row) > 10 else "",
+                    "status":         row[11] if len(row) > 11 else "Pending",
+                    "comment":        row[12] if len(row) > 12 else "",
                 })
 
         return jsonify({"error": "Order ID not found"}), 404
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

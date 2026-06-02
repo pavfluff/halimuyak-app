@@ -241,6 +241,7 @@
             color: #fff;
         }
 
+        /* ── Status card ── */
         .status-card {
             background: #faf5ee;
             border: 1px solid #e8d8c0;
@@ -249,7 +250,7 @@
             margin-bottom: 24px;
         }
 
-        .status-card button {
+        .status-card > button {
             width: 100%;
             padding: 12px;
             background: #6b4423;
@@ -260,29 +261,69 @@
             font-weight: bold;
             cursor: pointer;
             font-family: inherit;
+            transition: background 0.2s;
         }
+        .status-card > button:hover { background: #523319; }
 
+        /* ── Order status result / receipt ── */
         .order-status-result {
             display: none;
-            margin-top: 10px;
-            padding: 14px;
+            margin-top: 14px;
+            padding: 16px;
             background: #fff;
-            border-left: 4px solid #6b4423;
-            border-radius: 6px;
+            border: 1px solid #e8d8c0;
+            border-radius: 8px;
             color: #6b4423;
             font-size: 14px;
             line-height: 1.6;
         }
-
-        .order-status-result.show {
-            display: block;
-        }
-
+        .order-status-result.show { display: block; }
         .order-status-result.error {
-            border-left-color: #c0392b;
+            border-left: 4px solid #c0392b;
             color: #c0392b;
             background: #fadbd8;
         }
+
+        /* ── Receipt inner rows ── */
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0e4d4;
+            font-size: 14px;
+        }
+        .receipt-row:last-child { border-bottom: none; }
+        .receipt-label { color: #8b6f47; }
+        .receipt-value { font-weight: bold; color: #523319; }
+
+        .receipt-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0 0;
+            margin-top: 4px;
+            border-top: 2px solid #6b4423;
+            font-size: 17px;
+            font-weight: bold;
+            color: #6b4423;
+        }
+
+        /* ── Download receipt button (inside status result) ── */
+        .download-receipt-btn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 11px;
+            background: #6b4423;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 1px;
+            transition: background 0.2s;
+        }
+        .download-receipt-btn:hover { background: #523319; }
     </style>
 </head>
 <body>
@@ -293,7 +334,7 @@
         <img src="/static/images/halimuyak_logo.png" alt="Halimuyak logo">
         <p class="subtitle">
             Halimuyak Perfumery<br>
-            <span class="owners">by Alena, Tristan, & Aging</span>
+            <span class="owners">by Alena, Tristan, &amp; Aging</span>
         </p>
     </div>
 
@@ -321,6 +362,7 @@
         </p>
     </div>
 
+    <!-- ── Check Order Status ── -->
     <div class="status-card">
         <div class="section-header">Check Order Status</div>
 
@@ -334,6 +376,7 @@
         <div class="order-status-result" id="orderStatusResult"></div>
     </div>
 
+    <!-- ── Order Form ── -->
     <form id="perfumeForm">
 
         <div class="section-header">Personalized Perfume</div>
@@ -495,7 +538,7 @@
 
         <div class="warning" id="warning" style="display:none;"></div>
 
-        <!-- Place Order button (replaces old Download Receipt) -->
+        <!-- Place Order button -->
         <button type="button" id="placeOrderBtn" onclick="placeOrder()">
             🛒 Place Order
         </button>
@@ -543,6 +586,10 @@
         "Eclaire Eclat d' Arpege (W)":            "/static/images/oils/eclaire_eclat_arpeg.png",
         "Dyptique Philosykos (W)":                "/static/images/oils/dyptique_philosykos.png",
         "Montblanc Legend (M)":                   "/static/images/oils/montblanc_legend.png",
+        "VS Bare Vanilla (W)":                    "/static/images/oils/vs_bare_vanilla.png",
+        "YSL Black Opium (W)":                    "/static/images/oils/black_opium.png",
+        "Dior Fahrenheit (M)":                    "/static/images/oils/d_fahrenheit.png",
+        "Dior Sauvage (M)":                       "/static/images/oils/cd_sauvage.png",
     };
 
     // ── Bottle options ───────────────────────────────────────────────────
@@ -649,7 +696,6 @@
         warningEl.style.display   = "none";
         costSection.style.display = "none";
 
-        // Hide order ID row in receipt until order is placed
         document.getElementById("receiptOrderIdRow").style.display = "none";
 
         const selectedOpt = document.getElementById("perfume_type").selectedOptions[0];
@@ -713,13 +759,11 @@
                 warningEl.style.display = "block";
             }
 
-            // Store full result for Place Order
             lastResult             = data;
             lastResult._crochetVal = crochetVal;
             lastResult._customerName = document.getElementById("customer_name").value || "—";
             lastResult._oilPct     = oilPct;
 
-            // Reset Place Order button
             const btn = document.getElementById("placeOrderBtn");
             btn.disabled    = false;
             btn.textContent = "🛒 Place Order";
@@ -764,17 +808,14 @@
             if (res.ok && data.success) {
                 const orderId = data.order_id;
 
-                // Show order ID in the receipt area
-                document.getElementById("receiptOrderId").textContent    = orderId;
+                document.getElementById("receiptOrderId").textContent     = orderId;
                 document.getElementById("receiptOrderIdRow").style.display = "block";
 
-                // Show big banner below results
                 document.getElementById("bannerOrderId").textContent = orderId;
                 banner.classList.add("show");
 
                 btn.textContent = "✔ Order Placed!";
 
-                // Auto-download the receipt image with order ID in filename
                 downloadReceipt(orderId, lastResult._customerName, lastOilLabel);
 
             } else {
@@ -790,7 +831,7 @@
         }
     }
 
-    // ── Download receipt (called automatically after order placed) ───────
+    // ── Download receipt after placing order ─────────────────────────────
     function downloadReceipt(orderId, customerName, fragOil) {
         const receipt  = document.getElementById("results");
         const sanitize = str => (str || "").replace(/[^a-z0-9_\-\s]/gi, "").trim().replace(/\s+/g, "-");
@@ -822,14 +863,15 @@
         document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("selected"));
         el.classList.add("selected");
         document.getElementById("advertised_by").value = el.dataset.value;
-        }
+    }
 
-        async function checkOrderStatus() {
-        const orderId = document.getElementById("status_order_id").value.trim();
+    // ── Check Order Status ───────────────────────────────────────────────
+    async function checkOrderStatus() {
+        const orderId  = document.getElementById("status_order_id").value.trim();
         const resultEl = document.getElementById("orderStatusResult");
 
         resultEl.className = "order-status-result";
-        resultEl.textContent = "";
+        resultEl.innerHTML = "";
 
         if (!orderId) {
             resultEl.textContent = "Please enter your Order ID.";
@@ -838,12 +880,11 @@
         }
 
         try {
-            const res = await fetch("/check_order_status", {
+            const res  = await fetch("/check_order_status", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ order_id: orderId })
             });
-
             const data = await res.json();
 
             if (!res.ok) {
@@ -852,13 +893,75 @@
                 return;
             }
 
+            // ── Status badge color ──
+            const statusColors = {
+                "Pending":    { bg: "#fff3e0", border: "#e6a817", text: "#8a5c00" },
+                "Processing": { bg: "#e3f2fd", border: "#1976d2", text: "#0d47a1" },
+                "Ready":      { bg: "#e8f5e9", border: "#388e3c", text: "#1b5e20" },
+                "Completed":  { bg: "#f3e5f5", border: "#7b1fa2", text: "#4a148c" },
+                "Cancelled":  { bg: "#ffebee", border: "#c62828", text: "#b71c1c" },
+            };
+            const sc = statusColors[data.status] || { bg: "#faf5ee", border: "#6b4423", text: "#6b4423" };
+
+            const crochetCost = parseFloat(data.crochet_cost || 0);
+            const totalCost   = parseFloat(data.total_cost   || 0);
+
+            // ── Build receipt HTML ──
             resultEl.innerHTML = `
-                <strong>Order ID:</strong> ${data.order_id}<br>
-                <strong>Name:</strong> ${data.customer_name}<br>
-                <strong>Order Date:</strong> ${data.order_date}<br>
-                <strong>Status:</strong> ${data.status}<br>
-                <strong>Total Cost:</strong> ${data.total_cost}<br>
-                ${data.comment ? `<strong>Comment:</strong> ${data.comment}` : ""}
+                <div id="statusReceiptCard" style="font-family:'Georgia',serif; color:#6b4423;">
+
+                    <!-- Header -->
+                    <div style="text-align:center; padding-bottom:14px; border-bottom:1px solid #e8d8c0; margin-bottom:14px;">
+                        <div style="font-size:11px; text-transform:uppercase; letter-spacing:2px; color:#a0826d; margin-bottom:4px;">Halimuyak Perfumery</div>
+                        <div style="font-size:22px; font-weight:bold; letter-spacing:3px; color:#6b4423;">${data.order_id}</div>
+                        <div style="font-size:12px; color:#a0826d; margin-top:4px;">${data.order_date}</div>
+                        <div style="display:inline-block; margin-top:10px; padding:4px 16px; border-radius:20px; font-size:12px; font-weight:bold;
+                                    background:${sc.bg}; color:${sc.text}; border:1px solid ${sc.border};">
+                            ${data.status}
+                        </div>
+                    </div>
+
+                    <!-- Customer -->
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#a0826d; margin-bottom:6px;">Customer</div>
+                        <div style="font-size:15px; font-weight:bold;">${data.customer_name}</div>
+                        ${data.ordered_through ? `<div style="font-size:12px; color:#a0826d; margin-top:2px;">Promoted by: ${data.ordered_through}</div>` : ""}
+                    </div>
+
+                    <!-- Formula details -->
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#a0826d; margin-bottom:6px;">Formula</div>
+                        <div class="receipt-row"><span class="receipt-label">Fragrance Oil</span><span class="receipt-value">${data.frag_oil_name || "—"}</span></div>
+                        <div class="receipt-row"><span class="receipt-label">Concentration</span><span class="receipt-value">${data.oil_percentage || "—"}%</span></div>
+                        <div class="receipt-row"><span class="receipt-label">Oil Volume</span><span class="receipt-value">${data.oil_volume || "—"} ml</span></div>
+                        <div class="receipt-row"><span class="receipt-label">Total Volume</span><span class="receipt-value">${data.total_volume || "—"} ml</span></div>
+                    </div>
+
+                    <!-- Packaging -->
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#a0826d; margin-bottom:6px;">Packaging</div>
+                        <div class="receipt-row"><span class="receipt-label">Bottle</span><span class="receipt-value">${data.bottle_label || "—"}</span></div>
+                        ${crochetCost > 0 ? `<div class="receipt-row"><span class="receipt-label">Crochet Bag</span><span class="receipt-value">${peso(crochetCost)}</span></div>` : ""}
+                    </div>
+
+                    <!-- Total -->
+                    <div class="receipt-total-row">
+                        <span>Total Cost</span>
+                        <span>${peso(totalCost)}</span>
+                    </div>
+
+                    <!-- Comment -->
+                    ${data.comment ? `
+                    <div style="margin-top:14px; padding:10px 12px; background:#fdf3d8; border-left:3px solid #d4a93a; border-radius:0 4px 4px 0; font-size:13px; color:#8a6d1f;">
+                        <strong>Note:</strong> ${data.comment}
+                    </div>` : ""}
+
+                </div>
+
+                <!-- Download button (outside the captured card) -->
+                <button class="download-receipt-btn" onclick="downloadStatusReceipt('${data.order_id}', '${(data.customer_name || "").replace(/'/g, "\\'")}')">
+                    ⬇ Download Receipt
+                </button>
             `;
 
             resultEl.classList.add("show");
@@ -867,6 +970,20 @@
             resultEl.textContent = "Network error. Please try again.";
             resultEl.classList.add("show", "error");
         }
+    }
+
+    // ── Download status receipt ───────────────────────────────────────────
+    function downloadStatusReceipt(orderId, customerName) {
+        const card     = document.getElementById("statusReceiptCard");
+        const sanitize = str => (str || "").replace(/[^a-z0-9_\-\s]/gi, "").trim().replace(/\s+/g, "-");
+        const fileName = sanitize(customerName) + "_" + orderId + "_receipt";
+
+        html2canvas(card, { backgroundColor: "#ffffff", scale: 2 }).then(canvas => {
+            const link    = document.createElement("a");
+            link.download = fileName + ".png";
+            link.href     = canvas.toDataURL();
+            link.click();
+        });
     }
 </script>
 </body>
