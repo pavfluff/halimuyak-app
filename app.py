@@ -55,7 +55,7 @@ FRAG_COST_OPTIONS = load_base_cost_options(PRICING_URL)
 
 PERFUME_TYPES = {
     "edp":         {"name": "Eau de Parfum (EDP)",  "min": 15, "max": 25, "default": 20},
-    "edt":         {"name": "Eau de Toilette (EDT)", "min": 8,  "max": 15, "default": 12},
+    "edt":         {"name": "Eau de Toilette (EDT)", "min": 6,  "max": 15, "default": 15},
     "edc":         {"name": "Eau de Cologne (EDC)",  "min": 3,  "max": 8,  "default": 5},
     "body_splash": {"name": "Body Splash",           "min": 2,  "max": 4,  "default": 3},
     "after_shave": {"name": "After Shave",           "min": 1,  "max": 3,  "default": 2},
