@@ -390,7 +390,7 @@
         </p>
     </div>
 
-    <!-- ── Price increase announcement ── -->
+    <!-- ── Price increase announcement ──
     <div class="announcement-banner" id="announcementBanner">
         <div class="announcement-icon">📢</div>
         <div class="announcement-text">
@@ -409,7 +409,7 @@
         </div>
         
         <button class="announcement-close" onclick="document.getElementById('announcementBanner').style.display='none'" aria-label="Dismiss announcement">✕</button>
-    </div>
+    </div> -->
 
     <!-- ── About strip ── -->
     <div class="about-strip collapsed" id="aboutStrip" onclick="toggleAbout()">
@@ -485,6 +485,7 @@
         <div class="form-group">
             <label for="total_volume">Total Volume (ml)</label>
             <select id="total_volume">
+                <option value="30">30 ml</option>
                 <option value="50">50 ml</option>
                 <option value="100">100 ml</option>
             </select>
@@ -679,6 +680,11 @@
 
     // ── Bottle options ───────────────────────────────────────────────────
     const BOTTLE_OPTIONS = {
+        30: [
+            { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                       emoji: "🚫" },
+            { value: "29", label: "30 ml Clear Chanel Glass",   price: "₱29.00", image: "",                                       emoji: "🫙" },
+            { value: "49", label: "30 ml Black Cap",            price: "₱49.00", image: "",                                       emoji: "🫙" },
+        ],
         50: [
             { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                       emoji: "🚫" },
             { value: "30", label: "50 ml Clear Glass",          price: "₱30.00", image: "/static/images/bottles/clear-50ml.png",  emoji: "🫙" },
@@ -687,7 +693,7 @@
             { value: "0",  label: "No packaging / Refill only", price: "₱0",     image: "",                                       emoji: "🚫" },
             { value: "35", label: "100 ml Clear Glass",         price: "₱35.00", image: "/static/images/bottles/clear-100ml.png", emoji: "🫙" },
             { value: "55", label: "100 ml Gold Cap",            price: "₱55.00", image: "/static/images/bottles/gold-100ml.png",  emoji: "✨" },
-        ],
+        ]
     };
 
     // ── Wire up oil cards ────────────────────────────────────────────────
