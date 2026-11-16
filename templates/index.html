@@ -89,6 +89,80 @@
         .about-body p { margin-bottom: 15px; line-height: 1.6; }
         .about-body.open { display: block; }
 
+        /* ── Tabs ── */
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e8d8c0;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            color: #a0826d;
+            cursor: pointer;
+            transition: color 0.18s, border-color 0.18s;
+        }
+        .tab-btn:hover { color: #6b4423; }
+        .tab-btn.active {
+            color: #6b4423;
+            border-bottom-color: #6b4423;
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── 3 tabs: slightly tighter buttons ── */
+        .tab-btn { font-size: 13px; padding: 12px 4px; }
+
+        /* ── Fragrance oil Men / Women sub-tabs ── */
+        .oil-tab-bar { display: flex; gap: 10px; margin-bottom: 14px; }
+        .oil-tab {
+            flex: 1; padding: 10px 0; border: 2px solid #e8d8c0; border-radius: 6px;
+            background: #fff; color: #a0826d; font-family: inherit; font-size: 14px;
+            font-weight: bold; cursor: pointer; transition: border-color 0.18s, background 0.18s, color 0.18s;
+        }
+        .oil-tab:hover { border-color: #a0826d; }
+        .oil-tab.active { border-color: #6b4423; background: #6b4423; color: #fff; }
+
+        /* ── Best sellers ── */
+        .bs-status { text-align: center; color: #a0826d; font-style: italic; font-size: 14px; margin: 10px 0; }
+        .bs-group-title {
+            color: #6b4423; font-size: 15px; font-weight: bold;
+            margin: 6px 0 10px;
+        }
+        .bs-group + .bs-group { margin-top: 26px; }
+        .bs-item {
+            display: flex; align-items: center; gap: 12px;
+            background: #faf5ee; border: 1px solid #e8d8c0; border-radius: 8px;
+            padding: 10px 12px; margin-bottom: 8px;
+        }
+        .bs-rank {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            background: #e8d8c0; color: #6b4423; font-weight: bold; font-size: 13px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .bs-item:nth-child(1) .bs-rank { background: #d4a93a; color: #fff; }
+        .bs-item:nth-child(2) .bs-rank { background: #a8a8a8; color: #fff; }
+        .bs-item:nth-child(3) .bs-rank { background: #b87333; color: #fff; }
+        .bs-thumb, .bs-thumb-ph {
+            width: 48px; height: 48px; border-radius: 6px; flex-shrink: 0;
+            object-fit: contain; background: #f5e6d3;
+            display: flex; align-items: center; justify-content: center; font-size: 22px;
+        }
+        .bs-info { flex: 1; min-width: 0; }
+        .bs-name { font-size: 14px; font-weight: bold; color: #6b4423; line-height: 1.3; }
+        .bs-bar { height: 6px; background: #efe2cf; border-radius: 3px; margin-top: 6px; overflow: hidden; }
+        .bs-bar > span { display: block; height: 100%; background: #6b4423; border-radius: 3px; }
+        .bs-empty { color: #a0826d; font-style: italic; font-size: 13px; padding: 6px 0; }
+
         /* ── Section header ── */
         .section-header {
             color: #6b4423; font-size: 13px; font-weight: bold;
@@ -435,197 +509,231 @@
         </p>
     </div>
 
-    <!-- ── Check Order Status ── -->
-    <div class="status-card">
-        <div class="section-header">Check Order Status</div>
-
-        <div class="form-group">
-            <label for="status_order_id">Enter Order ID</label>
-            <input type="text" id="status_order_id" placeholder="e.g., HLM-AB12">
-        </div>
-
-        <button type="button" onclick="checkOrderStatus()">Check Status</button>
-
-        <div class="order-status-result" id="orderStatusResult"></div>
+    <!-- ── Tabs ── -->
+    <div class="tab-bar">
+        <button type="button" class="tab-btn active" data-tab="tab-order" onclick="switchTab('tab-order')">🛒 New Order</button>
+        <button type="button" class="tab-btn" data-tab="tab-status" onclick="switchTab('tab-status')">📋 Order Status</button>
+        <button type="button" class="tab-btn" data-tab="tab-bestsellers" onclick="switchTab('tab-bestsellers')">🏆 Best Sellers</button>
     </div>
 
-    <!-- ── Order Form ── -->
-    <form id="perfumeForm">
+    <!-- ══ TAB: Check Order Status ══ -->
+    <div class="tab-panel" id="tab-status">
+        <div class="status-card">
+            <div class="section-header" style="margin-top:0;">Check Order Status</div>
 
-        <div class="section-header">Personalized Perfume</div>
-
-        <div class="form-group">
-            <label for="customer_name">Customer Name</label>
-            <input type="text" id="customer_name" placeholder="e.g., Juan dela Cruz">
-        </div>
-
-        <div class="form-group">
-            <label>Promoted By</label>
-            <div style="display:flex; gap:10px;">
-                <div class="toggle-btn selected" data-value="Aging" onclick="selectAdvertiser(this)">Aging</div>
-                <div class="toggle-btn" data-value="Shane" onclick="selectAdvertiser(this)">Shane</div>
-                <div class="toggle-btn" data-value="Carol" onclick="selectAdvertiser(this)">Carol</div>
-                <div class="toggle-btn" data-value="Vherlie" onclick="selectAdvertiser(this)">Vherlie</div>
-                <div class="toggle-btn" data-value="Khrishia" onclick="selectAdvertiser(this)">Khrishia</div>
+            <div class="form-group">
+                <label for="status_order_id">Enter Order ID</label>
+                <input type="text" id="status_order_id" placeholder="e.g., HLM-AB12">
             </div>
-            <input type="hidden" id="advertised_by" value="Aging">
+
+            <button type="button" onclick="checkOrderStatus()">Check Status</button>
+
+            <div class="order-status-result" id="orderStatusResult"></div>
         </div>
-
-        <div class="section-header">Formula</div>
-
-        <div class="form-group">
-            <label for="perfume_type">Perfume Type &amp; Concentration</label>
-            <select id="perfume_type">
-                <option value="edp_30" data-type="edp" data-pct="30">Eau de Parfum — 30%</option>
-                <option value="edp_20" data-type="edp" data-pct="20">Eau de Parfum — 20%</option>
-                <option value="edt_15" data-type="edt" data-pct="15">Eau de Toilette — 15%</option>
-                <option value="edt_6" data-type="edt" data-pct="6">Eau de Toilette — 6%</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="total_volume">Total Volume (ml)</label>
-            <select id="total_volume">
-                <option value="30">30 ml</option>
-                <option value="50">50 ml</option>
-                <option value="100">100 ml</option>
-            </select>
-        </div>
-
-        <div class="section-header">Fragrance Oil</div>
-
-        <div class="form-group">
-            <label>Select Fragrance Oil</label>
-            <div class="card-picker" id="oilPicker">
-                {% for option in base_cost_options %}
-                <div class="picker-card"
-                     data-value="{{ option.value }}"
-                     data-label="{{ option.label }}">
-                    <div class="img-placeholder" id="oil-img-{{ loop.index0 }}">🌸</div>
-                    <div class="card-name">{{ option.label }}</div>
-                    <div class="card-price">₱{{ option.value }}/ml</div>
-                </div>
-                {% endfor %}
-            </div>
-            <input type="hidden" id="oil_cost_per_ml" value="">
-        </div>
-
-        <div class="section-header">Bottle / Packaging</div>
-
-        <div class="form-group">
-            <label>Select Bottle</label>
-            <div class="card-picker" id="bottlePicker"></div>
-            <input type="hidden" id="bottle_cost" value="0">
-        </div>
-
-        <!-- ── Crochet Bag Add-on ── -->
-        <div class="section-header">Crochet Bag Add-on</div>
-
-        <div class="form-group">
-            <label>Add a Crochet Bag?</label>
-            <div class="card-picker" id="crochetPicker">
-                <div class="picker-card selected" data-value="0">
-                    <div class="img-placeholder">🚫</div>
-                    <div class="card-name">No Crochet Bag</div>
-                    <div class="card-price">₱0</div>
-                </div>
-                <div class="picker-card" data-value="15">
-                    <img src="/static/images/addons/crochet.png" alt="Crochet Bag">
-                    <div class="card-name">Crochet Bag</div>
-                    <div class="card-price">₱15.00</div>
-                </div>
-            </div>
-            <input type="hidden" id="crochet_cost" value="0">
-        </div>
-
-        <div class="fixed-cost-note">
-            Perfume base cost is fixed at <strong>₱1.00</strong> per ml.
-        </div>
-
-        <button type="submit">Calculate Formula</button>
-    </form>
-
-    <div class="error" id="error"></div>
-
-    <!-- ── Results (captured for receipt image) ── -->
-    <div class="results" id="results">
-        <h2>Your Formula</h2>
-        <div style="margin-bottom:12px; color:#8b6f47; font-size:14px;">
-            Prepared for: <strong id="displayName" style="color:#6b4423;"></strong>
-        </div>
-        <div style="margin-bottom:6px; color:#8b6f47; font-size:14px;">
-            Order Date: <strong id="displayDate" style="color:#6b4423;"></strong>
-        </div>
-        <!-- Order ID shown on receipt image after order is placed -->
-        <div id="receiptOrderIdRow" style="display:none; margin-bottom:12px; color:#8b6f47; font-size:14px;">
-            Order ID: <strong id="receiptOrderId" style="color:#6b4423; letter-spacing:2px;"></strong>
-        </div>
-
-        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
-            <div class="perfume-label" id="perfumeLabel"></div>
-            <div class="perfume-label" id="fragName"></div>
-        </div>
-
-        <div class="result-section-title">Volumes</div>
-        <div class="result-row">
-            <span class="result-label">Fragrance Oil (<span id="oilPct"></span>%):</span>
-            <span class="result-value" id="oilVolume"></span>
-        </div>
-        <div class="result-row">
-            <span class="result-label">Perfume Base (<span id="basePct"></span>%):</span>
-            <span class="result-value" id="baseVolume"></span>
-        </div>
-        <div class="result-row">
-            <span class="result-label">Total Volume:</span>
-            <span class="result-value" id="totalVolume"></span>
-        </div>
-
-        <div id="costSection" style="display:none;">
-            <div class="result-section-title">Cost Breakdown</div>
-            <div class="result-row">
-                <span class="result-label">Fragrance Oil Cost:</span>
-                <span class="result-value" id="oilCost"></span>
-            </div>
-            <div class="result-row">
-                <span class="result-label">Perfume Base Cost:</span>
-                <span class="result-value" id="baseCost"></span>
-            </div>
-            <div class="result-row">
-                <span class="result-label" style="font-weight:bold;">Liquid Subtotal:</span>
-                <span class="result-value" id="liquidCost"></span>
-            </div>
-            <div class="result-row">
-                <span class="result-label" style="font-weight:bold;">Bottle / Packaging:</span>
-                <span class="result-value" id="bottleCost"></span>
-            </div>
-            <div class="result-row">
-                <span class="result-label" style="font-weight:bold;">Crochet Bag:</span>
-                <span class="result-value" id="crochetCostDisplay"></span>
-            </div>
-            <div class="result-row total">
-                <span class="result-label">Total Cost:</span>
-                <span class="result-value" id="totalCost"></span>
-            </div>
-            <div class="result-row" style="font-size:13px; padding-top:8px;">
-                <span class="result-label">Cost per ml:</span>
-                <span class="result-value" id="costPerMl"></span>
-            </div>
-        </div>
-
-        <div class="warning" id="warning" style="display:none;"></div>
-
-        <!-- Place Order button -->
-        <button type="button" id="placeOrderBtn" onclick="placeOrder()">
-            🛒 Place Order
-        </button>
     </div>
 
-    <!-- ── Order ID banner (shown below results after order placed) ── -->
-    <div class="order-id-banner" id="orderIdBanner">
-        <div class="banner-title">Your Order ID</div>
-        <div class="banner-id" id="bannerOrderId"></div>
-        <div class="banner-note">Screenshot or save this ID to track your order status 📋</div>
+    <!-- ══ TAB: Best Sellers ══ -->
+    <div class="tab-panel" id="tab-bestsellers">
+        <div class="section-header" style="margin-top:0;">Top 5 Best Sellers</div>
+        <div class="bs-status" id="bsStatus" style="display:none;"></div>
+
+        <div class="bs-group">
+            <div class="bs-group-title">👔 For Men</div>
+            <div id="bsMen"></div>
+        </div>
+
+        <div class="bs-group">
+            <div class="bs-group-title">👗 For Women</div>
+            <div id="bsWomen"></div>
+        </div>
     </div>
+
+    <!-- ══ TAB: New Order ══ -->
+    <div class="tab-panel active" id="tab-order">
+
+        <!-- ── Order Form ── -->
+        <form id="perfumeForm">
+
+            <div class="section-header" style="margin-top:0;">Personalized Perfume</div>
+
+            <div class="form-group">
+                <label for="customer_name">Customer Name</label>
+                <input type="text" id="customer_name" placeholder="e.g., Juan dela Cruz">
+            </div>
+
+            <div class="form-group">
+                <label>Promoted By</label>
+                <div style="display:flex; gap:10px;">
+                    <div class="toggle-btn selected" data-value="Aging" onclick="selectAdvertiser(this)">Aging</div>
+                    <div class="toggle-btn" data-value="Shane" onclick="selectAdvertiser(this)">Shane</div>
+                    <div class="toggle-btn" data-value="Carol" onclick="selectAdvertiser(this)">Carol</div>
+                    <div class="toggle-btn" data-value="Vherlie" onclick="selectAdvertiser(this)">Vherlie</div>
+                    <div class="toggle-btn" data-value="Khrishia" onclick="selectAdvertiser(this)">Khrishia</div>
+                </div>
+                <input type="hidden" id="advertised_by" value="Aging">
+            </div>
+
+            <div class="section-header">Formula</div>
+
+            <div class="form-group">
+                <label for="perfume_type">Perfume Type &amp; Concentration</label>
+                <select id="perfume_type">
+                    <option value="edp_30" data-type="edp" data-pct="30">Eau de Parfum — 30%</option>
+                    <option value="edp_20" data-type="edp" data-pct="20">Eau de Parfum — 20%</option>
+                    <option value="edt_15" data-type="edt" data-pct="15">Eau de Toilette — 15%</option>
+                    <option value="edt_6" data-type="edt" data-pct="6">Eau de Toilette — 6%</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="total_volume">Total Volume (ml)</label>
+                <select id="total_volume">
+                    <option value="30">30 ml</option>
+                    <option value="50">50 ml</option>
+                    <option value="100">100 ml</option>
+                </select>
+            </div>
+
+            <div class="section-header">Fragrance Oil</div>
+
+            <div class="form-group">
+                <label>Select Fragrance Oil</label>
+                <div class="oil-tab-bar">
+                    <button type="button" class="oil-tab active" data-gender="M">👔 Men</button>
+                    <button type="button" class="oil-tab" data-gender="W">👗 Women</button>
+                </div>
+                <div class="card-picker" id="oilPicker">
+                    {% for option in base_cost_options %}
+                    <div class="picker-card"
+                         data-value="{{ option.value }}"
+                         data-label="{{ option.label }}">
+                        <div class="img-placeholder" id="oil-img-{{ loop.index0 }}">🌸</div>
+                        <div class="card-name">{{ option.label }}</div>
+                        <div class="card-price">₱{{ option.value }}/ml</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <input type="hidden" id="oil_cost_per_ml" value="">
+            </div>
+
+            <div class="section-header">Bottle / Packaging</div>
+
+            <div class="form-group">
+                <label>Select Bottle</label>
+                <div class="card-picker" id="bottlePicker"></div>
+                <input type="hidden" id="bottle_cost" value="0">
+            </div>
+
+            <!-- ── Crochet Bag Add-on ── -->
+            <div class="section-header">Crochet Bag Add-on</div>
+
+            <div class="form-group">
+                <label>Add a Crochet Bag?</label>
+                <div class="card-picker" id="crochetPicker">
+                    <div class="picker-card selected" data-value="0">
+                        <div class="img-placeholder">🚫</div>
+                        <div class="card-name">No Crochet Bag</div>
+                        <div class="card-price">₱0</div>
+                    </div>
+                    <div class="picker-card" data-value="15">
+                        <img src="/static/images/addons/crochet.png" alt="Crochet Bag">
+                        <div class="card-name">Crochet Bag</div>
+                        <div class="card-price">₱15.00</div>
+                    </div>
+                </div>
+                <input type="hidden" id="crochet_cost" value="0">
+            </div>
+
+            <div class="fixed-cost-note">
+                Perfume base cost is fixed at <strong>₱1.00</strong> per ml.
+            </div>
+
+            <button type="submit">Calculate Formula</button>
+        </form>
+
+        <div class="error" id="error"></div>
+
+        <!-- ── Results (captured for receipt image) ── -->
+        <div class="results" id="results">
+            <h2>Your Formula</h2>
+            <div style="margin-bottom:12px; color:#8b6f47; font-size:14px;">
+                Prepared for: <strong id="displayName" style="color:#6b4423;"></strong>
+            </div>
+            <div style="margin-bottom:6px; color:#8b6f47; font-size:14px;">
+                Order Date: <strong id="displayDate" style="color:#6b4423;"></strong>
+            </div>
+            <!-- Order ID shown on receipt image after order is placed -->
+            <div id="receiptOrderIdRow" style="display:none; margin-bottom:12px; color:#8b6f47; font-size:14px;">
+                Order ID: <strong id="receiptOrderId" style="color:#6b4423; letter-spacing:2px;"></strong>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+                <div class="perfume-label" id="perfumeLabel"></div>
+                <div class="perfume-label" id="fragName"></div>
+            </div>
+
+            <div class="result-section-title">Volumes</div>
+            <div class="result-row">
+                <span class="result-label">Fragrance Oil (<span id="oilPct"></span>%):</span>
+                <span class="result-value" id="oilVolume"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Perfume Base (<span id="basePct"></span>%):</span>
+                <span class="result-value" id="baseVolume"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Total Volume:</span>
+                <span class="result-value" id="totalVolume"></span>
+            </div>
+
+            <div id="costSection" style="display:none;">
+                <div class="result-section-title">Cost Breakdown</div>
+                <div class="result-row">
+                    <span class="result-label">Fragrance Oil Cost:</span>
+                    <span class="result-value" id="oilCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Perfume Base Cost:</span>
+                    <span class="result-value" id="baseCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label" style="font-weight:bold;">Liquid Subtotal:</span>
+                    <span class="result-value" id="liquidCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label" style="font-weight:bold;">Bottle / Packaging:</span>
+                    <span class="result-value" id="bottleCost"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label" style="font-weight:bold;">Crochet Bag:</span>
+                    <span class="result-value" id="crochetCostDisplay"></span>
+                </div>
+                <div class="result-row total">
+                    <span class="result-label">Total Cost:</span>
+                    <span class="result-value" id="totalCost"></span>
+                </div>
+                <div class="result-row" style="font-size:13px; padding-top:8px;">
+                    <span class="result-label">Cost per ml:</span>
+                    <span class="result-value" id="costPerMl"></span>
+                </div>
+            </div>
+
+            <div class="warning" id="warning" style="display:none;"></div>
+
+            <!-- Place Order button -->
+            <button type="button" id="placeOrderBtn" onclick="placeOrder()">
+                🛒 Place Order
+            </button>
+        </div>
+
+        <!-- ── Order ID banner (shown below results after order placed) ── -->
+        <div class="order-id-banner" id="orderIdBanner">
+            <div class="banner-title">Your Order ID</div>
+            <div class="banner-id" id="bannerOrderId"></div>
+            <div class="banner-note">Screenshot or save this ID to track your order status 📋</div>
+        </div>
+
+    </div><!-- /tab-order -->
 
 </div>
 
@@ -637,6 +745,64 @@
     let lastResult      = null;
     let lastOilLabel    = null;
     let lastBottleLabel = null;
+
+    // ── Tab switching ────────────────────────────────────────────────────
+    function switchTab(tabId) {
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
+        history.replaceState(null, "", "#" + tabId.replace("tab-", ""));
+        if (tabId === "tab-bestsellers") loadBestSellers();
+    }
+
+    // ── Best sellers ─────────────────────────────────────────────────────
+    let bestSellersLoaded = false;
+
+    const escapeHtml = str => String(str).replace(/[&<>"']/g, c =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    function renderBestSellers(containerId, items) {
+        const el = document.getElementById(containerId);
+        if (!items || !items.length) {
+            el.innerHTML = '<div class="bs-empty">No orders yet.</div>';
+            return;
+        }
+        const max = items[0].orders || 1;
+        el.innerHTML = items.map((it, i) => {
+            const img = OIL_IMAGES[it.name]
+                ? `<img class="bs-thumb" src="${OIL_IMAGES[it.name]}" alt="">`
+                : `<div class="bs-thumb-ph">🌸</div>`;
+            const pct = Math.round((it.orders / max) * 100);
+            return `
+                <div class="bs-item">
+                    <div class="bs-rank">${i + 1}</div>
+                    ${img}
+                    <div class="bs-info">
+                        <div class="bs-name">${escapeHtml(it.name)}</div>
+                        <div class="bs-bar"><span style="width:${pct}%"></span></div>
+                    </div>
+                </div>`;
+        }).join("");
+    }
+
+    async function loadBestSellers() {
+        if (bestSellersLoaded) return;
+        const statusEl = document.getElementById("bsStatus");
+        statusEl.textContent = "Loading best sellers…";
+        statusEl.style.display = "block";
+        try {
+            const res  = await fetch("/best_sellers");
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed");
+            renderBestSellers("bsMen",   data.men);
+            renderBestSellers("bsWomen", data.women);
+            statusEl.style.display = "none";
+            bestSellersLoaded = true;
+        } catch (err) {
+            statusEl.textContent = "Couldn't load best sellers. Please try again.";
+        }
+    }
 
     // ── Oil images ───────────────────────────────────────────────────────
     const OIL_IMAGES = {
@@ -719,10 +885,33 @@
         });
     });
 
-    if (oilCards.length > 0) {
-        oilCards[0].classList.add("selected");
-        oilHidden.value = oilCards[0].dataset.value;
+    // ── Men / Women oil sub-tabs ─────────────────────────────────────────
+    const oilTabs = document.querySelectorAll(".oil-tab");
+
+    function filterOils(gender) {
+        oilTabs.forEach(t => t.classList.toggle("active", t.dataset.gender === gender));
+
+        let first = null;
+        oilCards.forEach(card => {
+            const m    = card.dataset.label.match(/\((M|W)\)\s*$/i);
+            const cg   = m ? m[1].toUpperCase() : null;
+            const show = !cg || cg === gender;          // untagged oils show in both tabs
+            card.style.display = show ? "" : "none";
+            if (show && !first) first = card;
+        });
+
+        // keep the selection always visible: select the first oil of this tab
+        oilCards.forEach(c => c.classList.remove("selected"));
+        if (first) {
+            first.classList.add("selected");
+            oilHidden.value = first.dataset.value;
+        } else {
+            oilHidden.value = "";
+        }
     }
+
+    oilTabs.forEach(t => t.addEventListener("click", () => filterOils(t.dataset.gender)));
+    filterOils("M");
 
     // ── Bottle picker ────────────────────────────────────────────────────
     const volumeSelect = document.getElementById("total_volume");
@@ -908,6 +1097,7 @@
                 banner.classList.add("show");
 
                 btn.textContent = "✔ Order Placed!";
+                bestSellersLoaded = false;   // refresh best sellers next time that tab opens
 
                 downloadReceipt(orderId, lastResult._customerName, lastOilLabel);
 
@@ -1078,6 +1268,14 @@
             link.click();
         });
     }
+
+    // ── Open the right tab on load (/#status, /#bestsellers) ─────────────
+    // Kept at the very end so everything above is defined first.
+    (function () {
+        const id = "tab-" + location.hash.slice(1);
+        const panel = document.getElementById(id);
+        if (panel && panel.classList.contains("tab-panel")) switchTab(id);
+    })();
 </script>
 </body>
 </html>

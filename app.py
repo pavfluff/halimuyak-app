@@ -3,7 +3,10 @@ import pandas as pd
 import requests
 import io
 import random
+import re
 import string
+import time
+from collections import Counter
 from datetime import datetime
 import gspread
 from google.oauth2.service_account import Credentials
@@ -60,6 +63,11 @@ PERFUME_TYPES = {
     "body_splash": {"name": "Body Splash",           "min": 2,  "max": 4,  "default": 3},
     "after_shave": {"name": "After Shave",           "min": 1,  "max": 3,  "default": 2},
 }
+
+# ── Best sellers cache (avoids hitting the Sheets API on every tab open) ──────
+BEST_SELLERS_TTL = 300  # seconds
+_best_sellers_cache = {"ts": 0, "data": None}
+GENDER_RE = re.compile(r"\(([MW])\)\s*$", re.IGNORECASE)
 
 
 def generate_order_id(existing_ids):
@@ -177,6 +185,8 @@ def place_order():
 
         ws.append_row(row, value_input_option="USER_ENTERED")
 
+        _best_sellers_cache["data"] = None   # new order → refresh best sellers
+
         return jsonify({"success": True, "order_id": order_id, "customer_name": customer_name})
 
     except Exception as e:
@@ -215,6 +225,52 @@ def check_order_status():
                 })
 
         return jsonify({"error": "Order ID not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/best_sellers")
+def best_sellers():
+    """Top 5 fragrance oils for men (M) and women (W), ranked by number of orders."""
+    try:
+        now = time.time()
+        if _best_sellers_cache["data"] and now - _best_sellers_cache["ts"] < BEST_SELLERS_TTL:
+            return jsonify(_best_sellers_cache["data"])
+
+        ws   = get_orders_sheet()
+        rows = ws.get_all_values()[1:]  # skip header
+
+        orders = {"M": Counter(), "W": Counter()}
+        volume = {"M": Counter(), "W": Counter()}   # used only to break ties
+
+        for row in rows:
+            if len(row) <= 5:
+                continue
+
+            status = row[11].strip().lower() if len(row) > 11 else ""
+            if status == "cancelled":
+                continue
+
+            name = " ".join(row[5].split())          # tidy stray whitespace
+            m = GENDER_RE.search(name)
+            if not m:
+                continue                              # no (M)/(W) tag → skip
+            g = m.group(1).upper()
+
+            orders[g][name] += 1
+            try:
+                volume[g][name] += float(row[4])
+            except (ValueError, TypeError):
+                pass
+
+        def top5(g):
+            ranked = sorted(orders[g], key=lambda n: (-orders[g][n], -volume[g][n], n))[:5]
+            return [{"name": n, "orders": orders[g][n]} for n in ranked]
+
+        data = {"men": top5("M"), "women": top5("W")}
+        _best_sellers_cache.update(ts=now, data=data)
+        return jsonify(data)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
